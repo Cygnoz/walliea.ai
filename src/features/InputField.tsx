@@ -9,12 +9,13 @@ import emailIcon from "../assets/images/Group.png";
 
 type Props = {
   isDarkMode: boolean;
+  isTyping: boolean;
   isRegistered: boolean;
   setIsRegistered: React.Dispatch<React.SetStateAction<boolean>>;
   onSendMessage: (message: string) => void;
 };
 
-function InputField({ isDarkMode, isRegistered, setIsRegistered, onSendMessage }: Props) {
+function InputField({ isDarkMode, isRegistered,isTyping, setIsRegistered, onSendMessage }: Props) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -50,7 +51,7 @@ function InputField({ isDarkMode, isRegistered, setIsRegistered, onSendMessage }
   };
 
   const handleSend = () => {
-    if (inputValue.trim()) {
+    if (inputValue.trim() && !isTyping) {
       onSendMessage(inputValue);  // Send the message to parent component
       setInputValue("");  // Clear the input after sending
     }
@@ -93,7 +94,7 @@ function InputField({ isDarkMode, isRegistered, setIsRegistered, onSendMessage }
         <div className="absolute flex gap-3 top-1/2 right-[10%] transform -translate-y-1/2">
           <MicIcon />
           <GalleryIcon />
-          <div className="ms-4"> 
+          <div className="ms-4" onClick={handleSend}> 
           <SendIcon isDarkMode={isDarkMode}  />
           </div>
         </div>

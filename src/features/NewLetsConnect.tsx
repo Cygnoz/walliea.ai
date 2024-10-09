@@ -1,6 +1,6 @@
-import Facebook from "../assets/icons/Facebook";
-import Instagram from "../assets/icons/Instagram";
-import YouTube from "../assets/icons/YouTube";
+import NewFbIcon from "../assets/icons/NewFbIcon";
+import NewInstaIcon from "../assets/icons/NewInstaIcon";
+import WhatsAppIcon from "../assets/icons/whatsAppIcon";
 
 type Props = {};
 
@@ -31,9 +31,9 @@ function NewLetsConnect({}: Props) {
           boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-          < YouTube/>
-          <Instagram />
-          <Facebook />
+          <WhatsAppIcon/>
+          <NewInstaIcon />
+          <NewFbIcon/>
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ import InputField from "../features/InputField";
 import MoreSuggestions from "../features/MoreSuggestions";
 import OfferView from "../features/OfferView";
 import Suggestions from "../features/Suggestions";
-import LetsConnect from "../features/LetsConnect";
 import personIMage from "../assets/images/Ellipse 2.png";
 import botImage from "../assets/images/Vector.png";
 import ArrowDown from "../assets/icons/ArrowDown";
@@ -31,14 +30,12 @@ function ChatBot({ isDarkMode }: Props) {
   const handleSendMessage = (message: string) => {
     setMessages((prevMessages) => [...prevMessages, { text: message, sender: "user" }]);
     setIsTyping(true); // Show skeleton loader while waiting for the bot response
-
-    // Simulate bot response after delay
     setTimeout(() => {
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: "Thank you for reaching out! We're currently under development. How can we assist you today?", sender: "bot" },
       ]);
-      setIsTyping(false); // Remove skeleton loader when the bot responds
+      setIsTyping(false); // Remove skeleton loader 
     }, 2000);
   };
 
@@ -190,6 +187,7 @@ function ChatBot({ isDarkMode }: Props) {
             isRegistered={isRegistered}
             setIsRegistered={setIsRegistered}
             onSendMessage={handleSendMessage}
+            isTyping={isTyping}
           />
           <span className="text-xs text-[#999999]">
             Wallya may display inaccurate info, including about availability, so double-check its responses
