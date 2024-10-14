@@ -9,6 +9,7 @@ import botImage from "../assets/images/Vector.png";
 import ArrowDown from "../assets/icons/ArrowDown";
 import SkeletonLoader from "../features/SkeletonLoader ";
 import NewLetsConnect from "../features/NewLetsConnect";
+import { sendMessage } from "../services/allApi";
 
 type Props = {
   isDarkMode: boolean;
@@ -27,17 +28,27 @@ function ChatBot({ isDarkMode }: Props) {
     }
   }, []);
 
-  const handleSendMessage = (message: string) => {
+  const handleSendMessage = async (message: string) => {
     setMessages((prevMessages) => [...prevMessages, { text: message, sender: "user" }]);
-    setIsTyping(true); // Show skeleton loader while waiting for the bot response
-    setTimeout(() => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: "Thank you for reaching out! We're currently under development. How can we assist you today?", sender: "bot" },
-      ]);
-      setIsTyping(false); // Remove skeleton loader 
-    }, 2000);
+    setIsTyping(true); 
+    try {
+      const response = await sendMessage({ message });
+      if (response.status === 200) {
+        const botResponse = response.data.response;
+        setTimeout(() => {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { text: botResponse, sender: "bot" },
+          ]);
+          setIsTyping(false);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setIsTyping(false); 
+    }
   };
+  
 
   const handleSuggestionClick = (suggestion: string) => {
     handleSendMessage(suggestion);

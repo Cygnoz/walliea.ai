@@ -25,10 +25,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]" } `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("Baltic Birch plywood. It's known for its strength, stability, and smooth finish.")}
+                        onClick={() => onSuggestionClick("What are the advantages of using plywood over solid wood?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">Baltic Birch plywood. It's known for its strength, stability, and smooth finish."</p>
+                        <p className="text-[0.625rem]">What are the advantages of using plywood over solid wood?</p>
                     </div>
 
                     {/* Suggestion 2 */}
@@ -36,10 +36,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]" } `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("Looking for inspiration? Check out our gallery of DIY plywood projects.")}
+                        onClick={() => onSuggestionClick("What are some common applications for plywood in furniture making?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">Looking for inspiration? Check out our gallery of DIY plywood projects.</p>
+                        <p className="text-[0.625rem]">What are some common applications for plywood in furniture making?</p>
                     </div>
 
                     {/* Suggestion 3 */}
@@ -47,10 +47,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]" } `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("Sign up for our newsletter and receive exclusive discounts.")}
+                        onClick={() => onSuggestionClick("How does the number of layers in plywood affect its strength and durability?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">Sign up for our newsletter and receive exclusive discounts. </p>
+                        <p className="text-[0.625rem]">How does the number of layers in plywood affect its strength and durability?</p>
                     </div>
                 </div>
 
@@ -60,10 +60,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]" } `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("Low-VOC Finishes: Choose plywood with finishes that have low or no volatile.")}
+                        onClick={() => onSuggestionClick("What is the lifespan of plywood when used in outdoor applications?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">Low-VOC Finishes: Choose plywood with finishes that have low or no volatile</p>
+                        <p className="text-[0.625rem]">What is the lifespan of plywood when used in outdoor applications?</p>
                     </div>
 
                     {/* Suggestion 5 */}
@@ -71,10 +71,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]" } `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("Sign up for our newsletter and receive exclusive discounts.")}
+                        onClick={() => onSuggestionClick("How does the thickness of plywood affect its strength and usage?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">Sign up for our newsletter and receive exclusive discounts </p>
+                        <p className="text-[0.625rem]">How does the thickness of plywood affect its strength and usage?</p>
                     </div>
 
                     {/* Suggestion 6 */}
@@ -82,10 +82,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]" } `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("Our plywood features low-VOC finishes comfortable home.")}
+                        onClick={() => onSuggestionClick("How can plywood be used in construction for structural applications?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">Our plywood features low-VOC finishes comfortable home.</p>
+                        <p className="text-[0.625rem]">How can plywood be used in construction for structural applications?</p>
                     </div>
                 </div>
 
