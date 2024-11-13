@@ -18,7 +18,7 @@ function Header({ isDarkMode, onToggle }: Props) {
         <div className="flex items-center gap-10">
           <img src={wallmarkAi} alt="Wallmark AI Logo" className="w-36" />
           <div className="mt-4">
-          <HomeIcon isDarkMode={isDarkMode} />
+            <HomeIcon isDarkMode={isDarkMode} />
           </div>
         </div>
         <div className="flex items-center mt- gap-1 ms-5">
@@ -34,7 +34,7 @@ function Header({ isDarkMode, onToggle }: Props) {
             <div className="relative">
               <input type="checkbox" className="sr-only" checked={isDarkMode} onChange={onToggle} />
               <div
-                className={`w-14 h-7 border-1 rounded-full transition-colors ${isDarkMode ? 'bg-[#4d4d4d] border-[#3f3f3f]' : 'bg-[#C4C4C4] border-[#ECECEC]'}`}
+                className={`w-14 h-7 border-1 rounded-full transition-colors ${isDarkMode ? 'bg-[#282727] border-[#3f3f3f]' : 'bg-[#C4C4C4] border-[#ECECEC]'}`}
                 style={isDarkMode
                   ? { boxShadow: 'inset 0px 4px 4px 0px #00000040, inset 4px 0px 5.2px 0px #00000040' }
                   : { boxShadow: 'inset 0px 4px 4px 0px #00000040, inset 1px 0px 1px 0px #00000040' }
@@ -55,7 +55,7 @@ function Header({ isDarkMode, onToggle }: Props) {
         </div>
 
         <div>
-          <BellIcon />
+          <BellIcon isDarkMode={isDarkMode} />
         </div>
         <div>
           <UserIcon isDarkMode={isDarkMode} />

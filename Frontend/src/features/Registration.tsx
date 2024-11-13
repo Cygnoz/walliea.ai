@@ -26,6 +26,10 @@ function Registration({
         email: "",
     });
 
+    const [errors, setErrors] = useState({
+        fullname: false,
+    });
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -37,10 +41,10 @@ function Registration({
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!userData.fullname || !userData.phone_no || !userData.company_name || !userData.email) {
-            alert("Please fill in all fields.");
-            return;
+        const newErrors = {
+            fullname: !userData.fullname,
         }
+        setErrors(newErrors);
         try {
             const response = await register(userData);
             if (response && response.status === 201) {
@@ -55,11 +59,15 @@ function Registration({
         }
     };
 
+    console.log(isDarkMode, "isdarkmode");
+
+
     return (
         <Modal
             open={isModalOpen}
             onClose={closeModal}
-            className={`w-[32%] text-start  px-8 py-6 ${isDarkMode ? "bg-[#151414]" : "bg-white"}`}
+            isDarkMode={isDarkMode}
+            className={`w-[32%] text-start  px-8 py-6 ${isDarkMode ? "bg-[#1C1C1C]" : "bg-white"}`}
         >
             <div>
                 <span className={`text-3xl font-semibold ${isDarkMode ? "text-[#E6E6E6]" : "text-[#3A3838]"}`}>
@@ -90,6 +98,11 @@ function Registration({
                                     : "border-[#B9B8B8] placeholder-[#DEDCDC]"} `}
                             placeholder="Enter name"
                         />
+                        {errors.fullname && (
+                            <div className="text-red-800 text-xs mt-2 ms-1">
+                                Name is required
+                            </div>
+                        )}
                     </div>
 
                     {/* Phone Number */}
@@ -99,17 +112,19 @@ function Registration({
                         </label>
                         <br />
                         <input
-                            type="text"
+                            type="number"
                             id="phone_no"
                             name="phone_no"
                             value={userData.phone_no}
-                            onChange={handleInputChange} // Update state on change
+                            onChange={handleInputChange}
                             className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
-                focus:outline-none rounded-lg h-11 ${isDarkMode
+    focus:outline-none rounded-lg h-11 ${isDarkMode
                                     ? "border-[#2F2F2F] placeholder-[#313131] text-white"
-                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"} `}
+                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"
+                                } no-spinner`} 
                             placeholder="Enter number"
                         />
+
                     </div>
 
                     {/* Company Name */}
@@ -162,7 +177,7 @@ function Registration({
                                     ? "bg-gradient-to-r from-[#C6FFAC] to-[#5DD723] text-[#1D5A00]"
                                     : "bg-[#C6FFAC] text-[#1D5A00]"}`}
                         >
-                            Register
+                            continue
                         </button>
                     </div>
                     <p className="text-xs text-center text-[#A8A4A4]">

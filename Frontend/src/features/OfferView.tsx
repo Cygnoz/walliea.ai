@@ -5,7 +5,7 @@ type Props = {}
 function OfferView({ }: Props) {
   return (
     <div
-      className="h-[42%] p-3 rounded-2xl w-[55%] bg-cover bg-center relative"
+      className="h-[43.5%] p-3 rounded-2xl w-[60%] bg-cover bg-center relative"
       style={{
         backgroundImage: `url(${chairImage})`,
       }}

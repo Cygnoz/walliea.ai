@@ -1,3 +1,4 @@
+// Modal.tsx
 import React, { useEffect, useMemo } from "react";
 
 type Props = {
@@ -7,9 +8,10 @@ type Props = {
   className?: string;
   style?: React.CSSProperties;
   align?: 'top' | 'center' | 'left' | 'right';
+  isDarkMode?: boolean; // New prop
 };
 
-const Modal = ({ onClose, open, children, className, style, align = 'center' }: Props) => {
+const Modal = ({ onClose, open, children, className, style, align = 'center', isDarkMode = false }: Props) => {
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -46,14 +48,14 @@ const Modal = ({ onClose, open, children, className, style, align = 'center' }: 
     <>
       {open && (
         <div
-          className={`fixed inset-0 z-20 flex ${getPositionStyles} bg-black/20 backdrop-blur-sm transition-opacity duration-300`} // Add backdrop-blur here
-          onClick={onClose} // This handles clicks outside the modal
+          className={`fixed inset-0 z-20 flex ${getPositionStyles} bg-black/20 backdrop-blur-sm transition-opacity duration-300`}
+          onClick={onClose}
           aria-modal="true"
           role="dialog"
         >
           <div
-            className={`bg-white rounded-3xl h-auto ${className || 'w-[60%]'} transition-transform duration-300`}
-            onClick={handleModalClick} // This stops click propagation inside the modal
+            className={`rounded-3xl h-auto ${className || 'w-[60%]'} transition-transform duration-300 ${isDarkMode ? 'bg-[#151414]' : 'bg-white'}`}
+            onClick={handleModalClick}
             style={style}
           >
             {children}
