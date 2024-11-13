@@ -77,7 +77,8 @@ function InputField({ isDarkMode, isRegistered,isTyping, setIsRegistered, onSend
           onClick={openModal} // Open modal if not registered
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}  // Detect Enter key press
-          className={`w-[86.4%] h-14 pl-14 pr-32 border-0 rounded-[58px] text-base focus:outline-none ${isDarkMode ? "bg-[#272626] text-white" : "bg-white text-black"
+          className={`w-[86.4%] h-14 pl-14 pr-32 border-0 rounded-[58px] text-base focus:outline-none 
+            ${isDarkMode ? "bg-[#272626] text-white" : "bg-white text-black"
             }`}
           placeholder="Need plywood ideas? Consult our wallya.ai"
           style={{
@@ -104,7 +105,7 @@ function InputField({ isDarkMode, isRegistered,isTyping, setIsRegistered, onSend
       <Modal
         open={isModalOpen}
         onClose={closeModal}
-        className={`w-[32%] text-start  px-8 py-6 ${isDarkMode ? "bg-[#1c1c1c]" : "bg-white"
+        className={`w-[32%] text-start  px-8 py-6 ${isDarkMode ? "bg-[#151414]" : "bg-white"
           }`}
       >
         <div>
@@ -112,7 +113,7 @@ function InputField({ isDarkMode, isRegistered,isTyping, setIsRegistered, onSend
             className={`text-3xl font-semibold ${isDarkMode ? "text-[#E6E6E6]" : "text-[#3A3838]"
               }`}
           >
-            Registration
+            Connect With Us
           </span>
           <br />
           <p

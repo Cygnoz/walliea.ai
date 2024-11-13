@@ -7,9 +7,9 @@ import Suggestions from "../features/Suggestions";
 import personIMage from "../assets/images/Ellipse 2.png";
 import botImage from "../assets/images/Vector.png";
 import ArrowDown from "../assets/icons/ArrowDown";
-import SkeletonLoader from "../features/SkeletonLoader ";
 import NewLetsConnect from "../features/NewLetsConnect";
 import { sendMessage } from "../services/allApi";
+import SkeletonLoader from "../features/SkeletonLoader ";
 
 type Props = {
   isDarkMode: boolean;
@@ -25,30 +25,46 @@ function ChatBot({ isDarkMode }: Props) {
     const storedIsRegistered = localStorage.getItem("isRegistered");
     if (storedIsRegistered === "true") {
       setIsRegistered(true);
-    }
+    }   
   }, []);
 
+  useEffect(()=>{
+    const storedMessages = sessionStorage.getItem("chatMessages");
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages));
+    }
+  },[])
+
   const handleSendMessage = async (message: string) => {
-    setMessages((prevMessages) => [...prevMessages, { text: message, sender: "user" }]);
-    setIsTyping(true); 
+    setMessages((prevMessages :any) => {
+      const updatedMessages = [...prevMessages, { text: message, sender: "user" }];
+      sessionStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
+      return updatedMessages;
+    });
+
+    setIsTyping(true);
+
     try {
       const response = await sendMessage({ message });
       if (response.status === 200) {
         const botResponse = response.data.response;
+
         setTimeout(() => {
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            { text: botResponse, sender: "bot" },
-          ]);
+          setMessages((prevMessages :any) => {
+            const updatedMessages = [...prevMessages, { text: botResponse, sender: "bot" }];
+            sessionStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
+            return updatedMessages;
+          });
+
           setIsTyping(false);
         }, 2000);
       }
     } catch (error) {
       console.error("Error sending message:", error);
-      setIsTyping(false); 
+      setIsTyping(false);
     }
   };
-  
+
 
   const handleSuggestionClick = (suggestion: string) => {
     handleSendMessage(suggestion);
@@ -99,7 +115,7 @@ function ChatBot({ isDarkMode }: Props) {
           )}
         </div>
         <div className="flex mt-auto justify-start ms-8">
-          {!isRegistered && <NewLetsConnect />}
+          {!isRegistered && <NewLetsConnect    isDarkMode={isDarkMode} />}
         </div>
       </div>
 
