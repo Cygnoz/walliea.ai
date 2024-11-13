@@ -5,18 +5,52 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain_community.llms import OpenAI
+import logging
 import os
 import requests
+import json
+from bson import json_util
 from bs4 import BeautifulSoup
 import openai
 import re
 from datetime import datetime
+from marshmallow import Schema, fields, ValidationError
+from pymongo import MongoClient
+from dotenv import load_dotenv
+from urllib.parse import quote_plus
+
+# Define the Registration Schema
+class RegistrationSchema(Schema):
+
+    fullname = fields.Str(required=True)
+    phone_no = fields.Str(required=True)
+    company_name = fields.Str(required=True)
+    email = fields.Email(required=True)
 
 app = Flask(__name__)
 CORS(app)
 
-# Set OpenAI API Key
-os.environ["OPENAI_API_KEY"] = "sk-GpCGFoh_RlXR4KQa1BzAgJHxqqkl8qNxlsAkpIpBlkT3BlbkFJLL3gfbpHIMXLoaRegDCp3BnqWgERyDVge9u1lw7jUA"
+# MongoDB credentials
+username = "dev"
+password = "walliea"  
+
+# URL-encode username and password
+encoded_username = quote_plus(username)
+encoded_password = quote_plus(password)
+
+# MongoDB connection string
+mongodb_uri = f"mongodb+srv://{encoded_username}:{encoded_password}@wallmark.tmreg.mongodb.net/?retryWrites=true&w=majority&appName=WallMark"
+
+try:
+    client = MongoClient(mongodb_uri)
+    db = client.get_database('WallMark')
+    app.config['db'] = db
+    register_collection = db.get_collection('registerSchema')
+    logging.info("Connected to MongoDB")
+except Exception as e:
+    logging.error(f"Failed to connect to MongoDB: {str(e)}")
+
+os.environ["OPENAI_API_KEY"] = "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"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 website_urls = [
@@ -62,7 +96,6 @@ Phone: +91 97 4491 2617
 Email: info@wallmarkply.com
 """
 
-# Function to scrape text from the provided URLs with error handling
 def scrape_data():
     raw_text = ''
     for url in website_urls:
@@ -88,7 +121,6 @@ embeddings = OpenAIEmbeddings()
 document_search = FAISS.from_texts(texts, embeddings)
 chain = load_qa_chain(OpenAI(), chain_type="stuff")
 
-# Adding error handling for OpenAI response
 def get_openai_response(prompt, context=None):
     try:
         messages = [{"role": "system", "content": context}] if context else []
@@ -103,7 +135,6 @@ def get_openai_response(prompt, context=None):
     except openai.error.OpenAIError as e:
         return f"OpenAI Error: {str(e)}"
 
-# Function to check if the question involves a calculation
 def is_calculation_question(question):
     math_keywords = ['calculate', 'sum', 'add', 'subtract', 'multiply', 'divide', 'total', 'average', 'mean', 'difference']
     math_symbols = re.search(r'[0-9\+\-\*/]', question)
@@ -112,7 +143,6 @@ def is_calculation_question(question):
         return True
     return False
 
-# Function to check if the question is about contact details or address
 def is_contact_or_location_question(question):
     contact_keywords = ['contact', 'phone', 'email', 'address', 'location', 'where', 'reach']
     if any(keyword in question.lower() for keyword in contact_keywords):
@@ -121,7 +151,7 @@ def is_contact_or_location_question(question):
 
 # Store chats with timestamps
 chat_history = []
-conversation_context = ""  # Store the concatenated context of previous chats
+conversation_context = ""
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -129,11 +159,11 @@ def chat():
     user_input = request.json['message']
     bot_response = ""
 
-    if user_input.lower() in ["hi", "hello", "hey"]:
-        bot_response = "Hello! Welcome to Wallmark Ply, How can I assist you today?"
+    if user_input.lower() in ["hi", "hii", "hello", "hey", "good morning", "good afternoon", "good evening", "greetings", "howdy", "what's up", "hey there", "hi there"]:
+        bot_response = "Hello! Welcome to Walliea, How can I assist you today?"
     elif user_input.lower() in ["wallmark", "wall mark"]:
         bot_response = "Wallmark Ply is a trusted and preferred brand of high-quality plywood that has won the prestigious Times Business Award. Powered by Cygnotech Labs, it is known for its passion for producing top-notch plywood products."
-    elif user_input.lower() in ["bye", "thank you", "thanks"]:
+    elif user_input.lower() in ["bye", "thank you", "thanks", "goodbye", "see you", "later", "talk to you later"]:
         bot_response = "Goodbye, and have a great day ahead!"
     elif is_contact_or_location_question(user_input):
         bot_response = CONTACT_DETAILS
@@ -164,11 +194,8 @@ def chat():
                     else:
                         bot_response = "Sorry, I couldn't find relevant information from our database."
     
-    # Store the conversation with timestamps
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     chat_history.append({"user": user_input, "bot": bot_response, "timestamp": timestamp})
-    
-    # Update conversation context for follow-up questions
     conversation_context += f"User: {user_input}\nWallya: {bot_response}\n"
 
     return jsonify({"response": bot_response})
@@ -179,6 +206,45 @@ def new_chat():
     chat_history = []
     conversation_context = ""
     return jsonify({"message": "New chat started"})
+
+@app.route('/register', methods=['POST'])
+def register():
+    try:
+        # Get the JSON data from the request
+        data = request.get_json()
+        
+        # Validate the input data using the schema
+        schema = RegistrationSchema()
+        validated_data = schema.load(data)
+        
+        # Insert into MongoDB
+        result = register_collection.insert_one(validated_data)
+        
+        # Return success response
+        return jsonify({
+            "message": "Registration successful",
+            "user_id": str(result.inserted_id),
+            "data": schema.dump(validated_data)
+        }), 201
+        
+    except ValidationError as err:
+        return jsonify({"error": "Validation error", "details": err.messages}), 400
+    except Exception as e:
+        return jsonify({"error": "Server error", "details": str(e)}), 500
+    
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    try:
+        users = register_collection.find({}, {
+        })
+        
+        # Convert users to list and parse ObjectId
+        users_list = json.loads(json_util.dumps(list(users)))
+        
+        return jsonify(users_list), 200
+        
+    except Exception as e:
+        return jsonify({"error": "Server error", "details": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
