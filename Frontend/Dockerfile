@@ -1,32 +1,36 @@
-# Use the official Node.js image as the base image for building the application
+# Build stage
 FROM node:20-alpine AS build
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
-COPY package.json package-lock.json ./
+# Copy package files
+COPY package*.json ./
 
-# Install the dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Add debug commands to see what's happening
+RUN npm run build && \
+    echo "Listing build directory contents:" && \
+    ls -la && \
+    echo "Listing dist directory contents:" && \
+    ls -la dist/
 
-# Use a lightweight web server to serve the built files
+# Production stage
 FROM nginx:alpine
 
-# Copy the built files from the previous stage
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy the built files from the previous stage - using dist instead of build
+COPY --from=build /app/dist/ /usr/share/nginx/html/
 
 # Copy custom Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 to the outside world
+# Expose port 5173
 EXPOSE 5173
 
-# Start the nginx server
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
