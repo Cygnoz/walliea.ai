@@ -16,8 +16,6 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 5001
 
-# Set environment variables
-# ENV MONGO_URI=your_mongodb_connection_string
 
 # Command to run the application
 CMD ["python", "wall_main.py"]

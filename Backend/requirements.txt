@@ -11,6 +11,8 @@ colorama==0.4.6
 dataclasses-json==0.6.7
 distro==1.9.0
 faiss-cpu==1.9.0
+Flask==2.3.2
+flask-cors==3.0.10
 frozenlist==1.4.1
 greenlet==3.1.1
 h11==0.14.0
