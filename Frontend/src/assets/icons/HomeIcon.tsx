@@ -5,9 +5,9 @@ type Props = {
   function HomeIcon({ isDarkMode }: Props) {
     return (
       <div
-        className={`rounded-full p-1.5 cursor-pointer transition-colors ${
+        className={` ${
           isDarkMode ? 'bg-[#272626]' : 'bg-[#FDFDFD]'
-        }`}
+        } rounded-full p-1.5 cursor-pointer transition-colors`}
       >
         <svg
           width="20"
