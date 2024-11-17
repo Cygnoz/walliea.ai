@@ -50,7 +50,7 @@ try:
 except Exception as e:
     logging.error(f"Failed to connect to MongoDB: {str(e)}")
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 website_urls = [

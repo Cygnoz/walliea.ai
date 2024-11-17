@@ -1,34 +1,21 @@
-import { useEffect, useState } from "react";
+import { useRegistration } from "../context/RegistrationContext"; // Import the context
 import GalleryIcon from "../assets/icons/GalleryIcon";
 import MicIcon from "../assets/icons/MicIcon";
 import SendIcon from "../assets/icons/SendIcon";
 import starIcon from "../assets/images/Vector.png";
 import Registration from "./Registration";
+import { useState } from "react";
 
 type Props = {
   isDarkMode: boolean;
   isTyping: boolean;
-  isRegistered: boolean;
-  setIsRegistered: React.Dispatch<React.SetStateAction<boolean>>;
   onSendMessage: (message: string) => void;
 };
 
-function InputField({
-  isDarkMode,
-  isRegistered,
-  isTyping,
-  setIsRegistered,
-  onSendMessage,
-}: Props) {
+function InputField({ isDarkMode, isTyping, onSendMessage }: Props) {
+  const { isRegistered } = useRegistration();
   const [isModalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
-  useEffect(() => {
-    const registered = localStorage.getItem("isRegistered");
-    if (registered === "true") {
-      setIsRegistered(true);
-    }
-  }, [setIsRegistered]);
 
   const openModal = () => {
     if (!isRegistered) {
@@ -102,7 +89,6 @@ function InputField({
       {/* Modal Component */}
       <Registration
         isModalOpen={isModalOpen}
-        setIsRegistered={setIsRegistered}
         isDarkMode={isDarkMode}
         closeModal={closeModal}
       />

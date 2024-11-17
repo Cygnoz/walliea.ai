@@ -1,17 +1,11 @@
-import { useEffect, useState } from "react";
 import personIMage from "../../assets/images/Ellipse 2.png";
+import { useRegistration } from "../../context/RegistrationContext";
 type Props = {
     isDarkMode: boolean;
 };
 
 function UserIcon({ isDarkMode }: Props) {
-    const [isRegistered, setIsRegistered] = useState<boolean>(false);
-    useEffect(() => {
-        const registered = localStorage.getItem("isRegistered");
-        if (registered === "true") {
-            setIsRegistered(true);
-        }
-    }, [setIsRegistered]);
+    const { isRegistered } = useRegistration();
     return (
         <>
             {

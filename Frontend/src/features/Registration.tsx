@@ -3,22 +3,16 @@ import Modal from "../components/Modal";
 import line from "../assets/images/Frame 1161.png";
 import emailIcon from "../assets/images/Group.png";
 import { register } from "../services/allApi";
+import { useRegistration } from "../context/RegistrationContext"; // Import the context
 
 type Props = {
     isModalOpen: boolean;
-    setIsRegistered: React.Dispatch<React.SetStateAction<boolean>>;
-    isDarkMode: boolean;
     closeModal: () => void;
+    isDarkMode: boolean;
 };
 
-function Registration({
-    isModalOpen,
-    setIsRegistered,
-    isDarkMode,
-    closeModal,
-}: Props) {
-
-
+function Registration({ isModalOpen, closeModal, isDarkMode }: Props) {
+    const { setIsRegistered } = useRegistration(); // Use the context to manage registration state
     const [userData, setUserData] = useState({
         fullname: "",
         phone_no: "",
@@ -29,7 +23,6 @@ function Registration({
     const [errors, setErrors] = useState({
         fullname: false,
     });
-
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -43,8 +36,9 @@ function Registration({
         e.preventDefault();
         const newErrors = {
             fullname: !userData.fullname,
-        }
+        };
         setErrors(newErrors);
+
         try {
             const response = await register(userData);
             if (response && response.status === 201) {
@@ -59,16 +53,8 @@ function Registration({
         }
     };
 
-    console.log(isDarkMode, "isdarkmode");
-
-
     return (
-        <Modal
-            open={isModalOpen}
-            onClose={closeModal}
-            isDarkMode={isDarkMode}
-            className={`w-[32%] text-start  px-8 py-6 ${isDarkMode ? "bg-[#1C1C1C]" : "bg-white"}`}
-        >
+        <Modal open={isModalOpen} onClose={closeModal} isDarkMode={isDarkMode} className={`w-[32%] text-start  px-8 py-6 ${isDarkMode ? "bg-[#1C1C1C]" : "bg-white"}`}>
             <div>
                 <span className={`text-3xl font-semibold ${isDarkMode ? "text-[#E6E6E6]" : "text-[#3A3838]"}`}>
                     Connect With Us
@@ -91,7 +77,7 @@ function Registration({
                             id="fullname"
                             name="fullname"
                             value={userData.fullname}
-                            onChange={handleInputChange} // Update state on change
+                            onChange={handleInputChange}
                             className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
                 focus:outline-none rounded-lg h-11 ${isDarkMode
                                     ? "border-[#2F2F2F] placeholder-[#313131] text-white"
@@ -120,11 +106,9 @@ function Registration({
                             className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
     focus:outline-none rounded-lg h-11 ${isDarkMode
                                     ? "border-[#2F2F2F] placeholder-[#313131] text-white"
-                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"
-                                } no-spinner`} 
+                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"} no-spinner`}
                             placeholder="Enter number"
                         />
-
                     </div>
 
                     {/* Company Name */}
@@ -138,7 +122,7 @@ function Registration({
                             id="company_name"
                             name="company_name"
                             value={userData.company_name}
-                            onChange={handleInputChange} // Update state on change
+                            onChange={handleInputChange}
                             className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
                 focus:outline-none rounded-lg h-11 ${isDarkMode
                                     ? "border-[#2F2F2F] placeholder-[#313131] text-white"
@@ -158,7 +142,7 @@ function Registration({
                             id="email"
                             name="email"
                             value={userData.email}
-                            onChange={handleInputChange} // Update state on change
+                            onChange={handleInputChange}
                             className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
                 focus:outline-none rounded-lg h-11 ${isDarkMode
                                     ? "border-[#2F2F2F] placeholder-[#313131] text-white"

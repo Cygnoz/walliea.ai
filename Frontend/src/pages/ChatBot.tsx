@@ -10,39 +10,35 @@ import ArrowDown from "../assets/icons/ArrowDown";
 import NewLetsConnect from "../features/NewLetsConnect";
 import { sendMessage } from "../services/allApi";
 import SkeletonLoader from "../features/SkeletonLoader ";
+import { useRegistration } from "../context/RegistrationContext";
 
 type Props = {
   isDarkMode: boolean;
 };
 
 function ChatBot({ isDarkMode }: Props) {
-  const [isRegistered, setIsRegistered] = useState<boolean>(false);
+  const { isRegistered } = useRegistration();
   const [messages, setMessages] = useState<{ text: string; sender: "user" | "bot" }[]>([]);
   const [showDownButton, setShowDownButton] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false); // State to track bot typing
 
   useEffect(() => {
-    const storedIsRegistered = localStorage.getItem("isRegistered");
-    if (storedIsRegistered === "true") {
-      setIsRegistered(true);
-    }   
-  }, []);
-
-  useEffect(()=>{
     const storedMessages = sessionStorage.getItem("chatMessages");
     if (storedMessages) {
       setMessages(JSON.parse(storedMessages));
     }
-  },[])
+  }, [])
 
   const handleSendMessage = async (message: string) => {
-    setMessages((prevMessages :any) => {
+    if (isTyping) return; // Prevent sending another message while bot is typing
+
+    setMessages((prevMessages: any) => {
       const updatedMessages = [...prevMessages, { text: message, sender: "user" }];
       sessionStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
       return updatedMessages;
     });
 
-    setIsTyping(true);
+    setIsTyping(true); // Block further suggestions/input until response comes back
 
     try {
       const response = await sendMessage({ message });
@@ -50,12 +46,11 @@ function ChatBot({ isDarkMode }: Props) {
         const botResponse = response.data.response;
 
         setTimeout(() => {
-          setMessages((prevMessages :any) => {
+          setMessages((prevMessages: any) => {
             const updatedMessages = [...prevMessages, { text: botResponse, sender: "bot" }];
             sessionStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
             return updatedMessages;
           });
-
           setIsTyping(false);
         }, 2000);
       }
@@ -64,10 +59,16 @@ function ChatBot({ isDarkMode }: Props) {
       setIsTyping(false);
     }
   };
+  const handleQuestionSelection = (question: string) => {
+    handleSendMessage(question);
+  };
+  
 
 
   const handleSuggestionClick = (suggestion: string) => {
-    handleSendMessage(suggestion);
+    if (!isTyping) {
+      handleSendMessage(suggestion);
+    }
   };
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -115,7 +116,7 @@ function ChatBot({ isDarkMode }: Props) {
           )}
         </div>
         <div className="flex mt-auto justify-start ms-8">
-          {!isRegistered && <NewLetsConnect    isDarkMode={isDarkMode} />}
+          {!isRegistered && <NewLetsConnect isDarkMode={isDarkMode} />}
         </div>
       </div>
 
@@ -160,7 +161,10 @@ function ChatBot({ isDarkMode }: Props) {
 
         <div className={`flex h-[70%] ${isRegistered ? "flex-col" : "items-center"}`}>
           <div>
-            {!isRegistered && <Suggestions isDarkMode={isDarkMode} />}
+            {!isRegistered && 
+            <Suggestions
+            onQuestionSelect={handleQuestionSelection} 
+              isDarkMode={isDarkMode} />}
             {!isRegistered && <p className="text-[#BEBEBE] text-sm mt-4">More Suggestions</p>}
             <div
               className="mt-4 overflow-y-auto"
@@ -201,7 +205,7 @@ function ChatBot({ isDarkMode }: Props) {
             {showDownButton && (
               <div className="text-white p-2 rounded-full  animate-pulse
               cursor-pointer fixed bottom-[15%] left-[50%]" onClick={scrollToBottom}
-              style={{background:"linear-gradient(90.33deg, #E0E0E0 0.1%, white 99.9%)"}}>
+                style={{ background: "linear-gradient(90.33deg, #E0E0E0 0.1%, white 99.9%)" }}>
                 <ArrowDown />
               </div>
             )}
@@ -211,8 +215,6 @@ function ChatBot({ isDarkMode }: Props) {
         <div className="absolute text-center bottom-0.5 w-[50%]">
           <InputField
             isDarkMode={isDarkMode}
-            isRegistered={isRegistered}
-            setIsRegistered={setIsRegistered}
             onSendMessage={handleSendMessage}
             isTyping={isTyping}
           />
