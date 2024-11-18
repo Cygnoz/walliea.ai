@@ -29,6 +29,12 @@ class RegistrationSchema(Schema):
     company_name = fields.Str(required=True)
     email = fields.Email(required=True)
 
+class BannerSchema(Schema):
+    
+    title = fields.Str(required=True)
+    image = fields.Str(required=True)
+    url = fields.Str(required=True)
+
 app = Flask(__name__)
 CORS(app)
 
@@ -48,6 +54,7 @@ try:
     db = client.get_database('WallMark')
     app.config['db'] = db
     register_collection = db.get_collection('registerSchema')
+    banner_collection = db.get_collection('banners')
     logging.info("Connected to MongoDB")
 except Exception as e:
     logging.error(f"Failed to connect to MongoDB: {str(e)}")
@@ -295,6 +302,20 @@ def get_all_users():
         users_list = json.loads(json_util.dumps(list(users)))
         
         return jsonify(users_list), 200
+        
+    except Exception as e:
+        return jsonify({"error": "Server error", "details": str(e)}), 500
+    
+@app.route('/banners', methods=['GET'])
+def get_all_banners():
+    try:
+        banner = banner_collection.find({}, {
+        })
+        
+        # Convert users to list and parse ObjectId
+        banners = json.loads(json_util.dumps(list(banner)))
+        
+        return jsonify(banners), 200
         
     except Exception as e:
         return jsonify({"error": "Server error", "details": str(e)}), 500
