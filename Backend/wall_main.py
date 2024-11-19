@@ -30,6 +30,7 @@ class RegistrationSchema(Schema):
 class BannerSchema(Schema):
     
     title = fields.Str(required=True)
+    subtitle = fields.Str(required=True)
     image = fields.Str(required=True)
     url = fields.Str(required=True)
 
@@ -213,7 +214,7 @@ def chat():
     "hiya", "hay", "heyyy", "heyo", "hoho", "hai", "haiii","heii", "yooo", "yoo-hoo", 
     "heey", "helloo", "ello", "oi", "haaai", "hi-hi", "alo", "yoohoo", "ey"]:
 
-        bot_response = "Hello! Welcome to walliea.ai Ply, how can I assist you today?"
+        bot_response = "Hello! Welcome to walliea.ai, how can I assist you today?"
     elif user_input.lower() in ["wallmark", "wall mark"]:
         bot_response = "Wallmark Ply is a trusted and preferred brand of high-quality plywood that has won the prestigious Times Business Award. Powered by Cygnotech Labs, it is known for its passion for producing top-notch plywood products."
     elif user_input.lower() in ["bye", "thank you", "thanks", "goodbye", "see you", "later", "talk to you later"]:
