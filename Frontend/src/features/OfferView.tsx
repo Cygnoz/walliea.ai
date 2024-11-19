@@ -45,10 +45,24 @@ function OfferView({ }: Props) {
             }}
           >
             {/* title here */}
-            <span className="text-white text-xs">{banner.title}</span>
+            <div className="max-w-[100%] overflow-x-auto whitespace-nowrap"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              <span
+                className="text-white text-center text-xs"
+              >
+                {banner.title}
+              </span>
+            </div>
             <p className="border-b border-dashed border-white mb-2 mt-1"></p>
             <div className="flex justify-between items-center">
-              <span className="text-[#5E5E5E] text-[0.625rem]">Terms & Condition Apply</span>
+              <span
+                className="text-[#5E5E5E] text-[0.625rem] max-w-[72%] overflow-x-auto whitespace-nowrap"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {banner.subtitle}
+              </span>
+
               {/* url link here */}
               <a
                 href={banner.url}
