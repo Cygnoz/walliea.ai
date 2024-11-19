@@ -5,6 +5,7 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain_community.llms import OpenAI
+from langchain_openai import OpenAIEmbeddings
 import logging
 import os
 import requests
@@ -58,8 +59,10 @@ try:
 except Exception as e:
     logging.error(f"Failed to connect to MongoDB: {str(e)}")
 
-os.environ["OPENAI_API_KEY"] = "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"
+load_dotenv()
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 website_urls = [
     "https://wallmarkply.com/",
