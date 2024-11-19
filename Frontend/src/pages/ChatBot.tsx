@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import walleiaiImage from "../assets/images/fileasjhb 1.png";
 import InputField from "../features/InputField";
 import MoreSuggestions from "../features/MoreSuggestions";
-import OfferView from "../features/OfferView";
+import OfferView from "../features/OfferViewTop";
 import Suggestions from "../features/Suggestions";
 import personIMage from "../assets/images/Ellipse 2.png";
 import botImage from "../assets/images/Vector.png";
@@ -20,7 +20,7 @@ function ChatBot({ isDarkMode }: Props) {
   const { isRegistered } = useRegistration();
   const [messages, setMessages] = useState<{ text: string; sender: "user" | "bot" }[]>([]);
   const [showDownButton, setShowDownButton] = useState<boolean>(false);
-  const [isTyping, setIsTyping] = useState<boolean>(false); // State to track bot typing
+  const [isTyping, setIsTyping] = useState<boolean>(false);
 
   useEffect(() => {
     const storedMessages = sessionStorage.getItem("chatMessages");
@@ -30,7 +30,7 @@ function ChatBot({ isDarkMode }: Props) {
   }, [])
 
   const handleSendMessage = async (message: string) => {
-    if (isTyping) return; // Prevent sending another message while bot is typing
+    if (isTyping) return;
 
     setMessages((prevMessages: any) => {
       const updatedMessages = [...prevMessages, { text: message, sender: "user" }];
@@ -38,7 +38,7 @@ function ChatBot({ isDarkMode }: Props) {
       return updatedMessages;
     });
 
-    setIsTyping(true); // Block further suggestions/input until response comes back
+    setIsTyping(true);
 
     try {
       const response = await sendMessage({ message });
@@ -173,7 +173,7 @@ function ChatBot({ isDarkMode }: Props) {
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",
               }}
-              ref={messagesContainerRef} // for scrolling
+              ref={messagesContainerRef}
             >
               {messages.map((msg, index) => (
                 <div key={index} className={`mb-4 text-sm flex items-center justify-end`}>
@@ -228,7 +228,6 @@ function ChatBot({ isDarkMode }: Props) {
         <div
           className="fixed -right-20 bottom-0 w-[23%] space-y-5 h-[75vh]"
         >
-          <OfferView />
           <OfferView />
         </div>
       </div>

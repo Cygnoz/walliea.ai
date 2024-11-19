@@ -20,3 +20,7 @@ export const sendMessage = async (reqBody: RequestBody): Promise<any> => {
 export const register = async (reqBody: RegisterRequestBody): Promise<any> => {
   return await commonAPI("POST", `${BaseURL}/register`, reqBody);
 };
+
+export const getAllBanner = async (): Promise<any> => {
+  return await commonAPI("GET", `${BaseURL}/banners`);
+};

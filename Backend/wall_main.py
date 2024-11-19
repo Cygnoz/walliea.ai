@@ -165,11 +165,6 @@ def chat():
     global conversation_context
     user_input = request.json['message']
     bot_response = ""
-<<<<<<< HEAD
-
-    if user_input.lower() in ["Hey", "Hi", "Hii", "Hello", "Hlo", "Heya", "Yo", "Howdy", "Hola", "Ciao", "Heyo", "Sup", "Hullo", "Hiya", "Bonjour", "Namaste", "Salaam", "Ola", "Ahoy", "Hi-5", "Shalom", "Aloha", "Cheers", "Bless", "Peace", "G’day", "Kon’nichiwa", "Wazzup", "Marhaba", "Salute", "Jambo", "Howzit", "Oi", "Saludos", "Tag", "Yoho", "Buongiorno", "Merhaba", "Alola", "Heya", "Hihi", "W’appen?", "Hallo", "Howdy-do", "Salve", "Ello", "Top!", "Yohoho", "Heya!", "Hey-hey", "Heya-hey", "‘Sup", "Yoo-hoo", "Ho-ho", "Whoop!", "Ayo", "Here!", "Whaddup", "Peekaboo", "Hullo!", "Helloo", "Yoo", "Youhoo", "Ey!", "Greets", "Greetz", "Ellow!", "Cheers!", "Waddup", "Wah", "Haaai", "Eyyo", "Ho!", "Olaa", "Annyeong", "Hai!", "Yessir", "Ya", "Saluto", "Yoop", "‘Hoy", "‘Lo", "Heey", "Alohaa", "Wotcha", "Oye", "Hola!", "Chao", "Servus", "Guten!", "Blessings", "Yow", "Heeyyy", "Yep", "Thumbs-up", "Greeetz", "Hoot!", "Haii", "Hay", "Peace", "Morning!", "Good day!", "Rise and shine!", "Top of the morning!", "Have a great morning!", "Wishing you a lovely morning!", "Bright and early!", "Hope your morning is wonderful!", "Hello, sunshine!", "A beautiful morning to you!", "Here’s to a fresh start!", "Good morning to you!", "Wishing you a happy morning!", "Enjoy your morning!", "Start your day with a smile!", "Good vibes this morning!", "Make it a great morning!", "Morning blessings to you!", "Have a refreshing morning!", "Hope your morning’s off to a good start!", "Hi! How’s it going?", "Hello! What’s up?", "Hey! How are you?", "Hi there! How’s your day?", "Hello! What are you up to?", "Good morning! How’s everything?", "Hi! Hope you’re doing well.", "Hey there! Got a minute?", "Hi! How’ve you been?", "Hello! Anything new?", "Hey! How’s your day been?", "Hi there! What’s on your mind?", "Hello! How’s your week going?", "Hi! All good with you?", "Hey! Need any help?", "Hi! What’s going on?", "Hello! How’s life treating you?", "Hi there! What’s happening?", "Hey! Got any plans today?", "Hi! How’s everything going?", "Hi! How’s it going?", "Hello! What’s up?", "Hey! How are you?", "Hi there! How’s your day?", "Hello! What are you up to?", "Good morning! How’s everything?", "Hi! Hope you’re doing well.", "Hey there! Got a minute?", "Hi! How’ve you been?", "Hello! Anything new?", "Hey! How’s your day been?", "Hi there! What’s on your mind?", "Hello! How’s your week going?", "Hi! All good with you?", "Hey! Need any help?", "Hi! What’s going on?", "Hello! How’s life treating you?", "Hi there! What’s happening?", "Hey! Got any plans today?", "Hi! How’s everything going?", "Hlo", "Lo", "Loo", "Hihi", "Heeey", "Hey", "Heyy", "Heya", "Yoo", "Yo", "Ho", "Hoy", "Hiya", "Hay", "Heyyy", "Heyo", "Hoho", "Hai", "Haiii", "Yooo", "Yoo-hoo", "Heey", "Helloo", "Ello", "Oi", "Haaai", "Hi-hi", "Alo", "Yoohoo", "Ey"]:
-        bot_response = "Hello! Welcome to Walliea, How can I assist you today?"
-=======
  
     # Handling greetings with OpenAI
     # greeting_response = openai.ChatCompletion.create(
@@ -219,7 +214,6 @@ def chat():
     "heey", "helloo", "ello", "oi", "haaai", "hi-hi", "alo", "yoohoo", "ey"]:
 
         bot_response = "Hello! Welcome to walliea.ai Ply, how can I assist you today?"
->>>>>>> ee8b04e5dfa78500518c37dec6351c7e21e8e6a5
     elif user_input.lower() in ["wallmark", "wall mark"]:
         bot_response = "Wallmark Ply is a trusted and preferred brand of high-quality plywood that has won the prestigious Times Business Award. Powered by Cygnotech Labs, it is known for its passion for producing top-notch plywood products."
     elif user_input.lower() in ["bye", "thank you", "thanks", "goodbye", "see you", "later", "talk to you later"]:
