@@ -62,7 +62,7 @@ function ChatBot({ isDarkMode }: Props) {
   const handleQuestionSelection = (question: string) => {
     handleSendMessage(question);
   };
-  
+
 
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -161,10 +161,10 @@ function ChatBot({ isDarkMode }: Props) {
 
         <div className={`flex h-[70%] ${isRegistered ? "flex-col" : "items-center"}`}>
           <div>
-            {!isRegistered && 
-            <Suggestions
-            onQuestionSelect={handleQuestionSelection} 
-              isDarkMode={isDarkMode} />}
+            {!isRegistered &&
+              <Suggestions
+                onQuestionSelect={handleQuestionSelection}
+                isDarkMode={isDarkMode} />}
             {!isRegistered && <p className="text-[#BEBEBE] text-sm mt-4">More Suggestions</p>}
             <div
               className="mt-4 overflow-y-auto"
@@ -224,9 +224,15 @@ function ChatBot({ isDarkMode }: Props) {
         </div>
       </div>
 
-      <div className="col-span-3 flex items-end justify-end me-8 h-[75vh]">
-        <OfferView />
+      <div className="col-span-3 w-full h-[75vh]">
+        <div
+          className="fixed -right-20 bottom-0 w-[23%] space-y-5 h-[75vh]"
+        >
+          <OfferView />
+          <OfferView />
+        </div>
       </div>
+
     </div>
   );
 }
