@@ -1,17 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from langchain_community.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import OpenAI, OpenAIEmbeddings  # Updated import
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain.chains.question_answering import load_qa_chain
-from langchain_community.llms import OpenAI
+
+# from langchain.chains import create_stuff_documents_chain  # Updated import
+from langchain_core.prompts import PromptTemplate 
 import logging
 import os
 import requests
 import json
 from bson import json_util
 from bs4 import BeautifulSoup
-import openai
+from openai import OpenAI as OpenAIClient  # Updated OpenAI import
 import re
 from datetime import datetime
 from marshmallow import Schema, fields, ValidationError
@@ -58,8 +59,8 @@ try:
 except Exception as e:
     logging.error(f"Failed to connect to MongoDB: {str(e)}")
 
-os.environ["OPENAI_API_KEY"] = "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"
-openai.api_key = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = ""
+openai_client = OpenAIClient()
 
 website_urls = [
     "https://wallmarkply.com/",
@@ -127,20 +128,33 @@ texts = text_splitter.split_text(raw_text)
 # Download embeddings from OpenAI
 embeddings = OpenAIEmbeddings()
 document_search = FAISS.from_texts(texts, embeddings)
-chain = load_qa_chain(OpenAI(), chain_type="stuff")
+# Create the QA chain with updated syntax
+qa_prompt = PromptTemplate(
+    template="""Use the following pieces of context to answer the question at the end. 
+    If you don't know the answer, just say that you don't know.
+
+    {context}
+
+    Question: {question}
+    """,
+    input_variables=["context", "question"]
+)
+
+llm = OpenAI(temperature=0)
+# chain = create_stuff_documents_chain(llm, qa_prompt)
 
 def get_openai_response(prompt, context=None):
     try:
         messages = [{"role": "system", "content": context}] if context else []
         messages.append({"role": "user", "content": prompt})
 
-        response = openai.ChatCompletion.create(
+        response = openai_client.chat.completions.create(  # Updated OpenAI API call
             model="gpt-3.5-turbo",
             messages=messages,
             max_tokens=200
         )
-        return response.choices[0].message['content'].strip()
-    except openai.error.OpenAIError as e:
+        return response.choices[0].message.content.strip()
+    except Exception as e:
         return f"OpenAI Error: {str(e)}"
 
 def is_calculation_question(question):

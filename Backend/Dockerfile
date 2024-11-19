@@ -1,21 +1,26 @@
-# Use the official Python image from the Docker Hub
 FROM python:3.11-slim
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file into the container
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3-full \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create and activate virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy requirements first to leverage Docker cache
 COPY requirements.txt .
 
-# Install the dependencies
+# Install dependencies in the virtual environment
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container
+# Copy the rest of your application
 COPY . .
 
-# Expose the port the app runs on
+# Run the application
 EXPOSE 5001
-
-
-# Command to run the application
 CMD ["python", "wall_main.py"]
