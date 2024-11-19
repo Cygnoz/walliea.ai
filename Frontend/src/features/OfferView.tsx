@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import chairImage from "../assets/images/Rectangle 32.png";
 import { getAllBanner } from "../services/allApi";
 
 type Props = {}

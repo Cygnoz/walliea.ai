@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import walleiaiImage from "../assets/images/fileasjhb 1.png";
 import InputField from "../features/InputField";
 import MoreSuggestions from "../features/MoreSuggestions";
-import OfferView from "../features/OfferViewTop";
+import OfferView from "../features/OfferView";
 import Suggestions from "../features/Suggestions";
 import personIMage from "../assets/images/Ellipse 2.png";
 import botImage from "../assets/images/Vector.png";
