@@ -19,6 +19,7 @@ from marshmallow import Schema, fields, ValidationError
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
+import mimetypes
 
 # Define the Registration Schema
 class RegistrationSchema(Schema):
@@ -109,15 +110,19 @@ Email: info@wallmarkply.com
 
 def scrape_data():
     raw_text = ''
-    for url in website_urls:
+    for url in website_urls:  # Load URLs from the imported list
         try:
             response = requests.get(url)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
+            response.raise_for_status()  # Raises an error for bad status codes
+            content_type = response.headers.get("Content-Type", "")
+            if "xml" in content_type or mimetypes.guess_type(url)[0] == "application/xml":
+                soup = BeautifulSoup(response.content, 'xml')  # Use XML parser
+            else:
+                soup = BeautifulSoup(response.content, 'html.parser')  # Use HTML parser
             for paragraph in soup.find_all(['p', 'h1', 'h2', 'h3']):
                 raw_text += paragraph.get_text() + "\n"
         except requests.exceptions.RequestException as e:
-            print(f"Failed to retrieve {url}: {str(e)}")
+            print(f"Failed to retrieve {url}: {str(e)}")  # Log failure, continue to next URL
     return raw_text
 
 # Scrape data from websites
