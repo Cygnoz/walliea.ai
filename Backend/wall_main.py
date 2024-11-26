@@ -4,7 +4,8 @@ from langchain_community.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
-from langchain_community.llms import OpenAI
+# from langchain_community.llms import OpenAI
+from langchain_openai import OpenAI
 from langchain_openai import OpenAIEmbeddings
 import logging
 import os
@@ -135,7 +136,8 @@ texts = text_splitter.split_text(raw_text)
 # Download embeddings from OpenAI
 embeddings = OpenAIEmbeddings()
 document_search = FAISS.from_texts(texts, embeddings)
-chain = load_qa_chain(OpenAI(), chain_type="stuff")
+# chain = load_qa_chain(OpenAI(), chain_type="stuff")
+chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
 
 def get_openai_response(prompt, context=None):
     try:
