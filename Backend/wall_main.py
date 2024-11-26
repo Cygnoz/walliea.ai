@@ -21,7 +21,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 import mimetypes
-from langchain.chains import RetrievalQA
+# from langchain.chains import RetrievalQA
 
 # Define the Registration Schema
 class RegistrationSchema(Schema):
@@ -138,12 +138,12 @@ texts = text_splitter.split_text(raw_text)
 embeddings = OpenAIEmbeddings()
 document_search = FAISS.from_texts(texts, embeddings)
 # chain = load_qa_chain(OpenAI(), chain_type="stuff")
-# chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
-chain = RetrievalQA.from_chain_type(
-    llm=OpenAI(temperature=0),
-    retriever=document_search.as_retriever(),
-    chain_type="stuff"
-)
+chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
+# chain = RetrievalQA.from_chain_type(
+#     llm=OpenAI(temperature=0),
+#     retriever=document_search.as_retriever(),
+#     chain_type="stuff"
+# )
 
 def get_openai_response(prompt, context=None):
     try:
