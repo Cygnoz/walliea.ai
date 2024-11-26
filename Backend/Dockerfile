@@ -1,26 +1,26 @@
-FROM python:3.11-slim
+# Use the official Python base image
+FROM python:3.9-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    python3-full \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Copy the current directory contents into the container
+COPY . /app
 
-# Create and activate virtual environment
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt .
-
-# Install dependencies in the virtual environment
+# Install the necessary dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of your application
-COPY . .
+# Install langchain-openai package to fix the deprecation warning
+RUN pip install -U langchain-openai
 
-# Run the application
+# Expose the port for your backend
 EXPOSE 5001
-CMD ["python", "wall_main.py"]
+
+# Set the environment variable to indicate production mode (optional)
+ENV FLASK_ENV=production
+
+# Install Gunicorn to run the app in production
+RUN pip install gunicorn
+
+# Command to run the app with Gunicorn in production
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5001", "wall_main:app"]
