@@ -95,7 +95,7 @@ website_urls = [
     "https://wallmarkply.com/2024/08/",
     "https://wallmarkply.com/category/blog/",
     "https://wallmarkply.com/index.php/pvc-board/",
-    "https://wallmarkply.com/index.php/doors/",
+    "https://wallmarkply.com/index.php/doors/", 
     "https://wallmarkply.com/index.php/veneers/",
     "https://wallmarkply.com/index.php/particle-board/",
     "https://wallmarkply.com/index.php/plywoods/",
