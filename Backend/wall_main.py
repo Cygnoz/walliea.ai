@@ -18,7 +18,8 @@ import re
 from datetime import datetime
 from marshmallow import Schema, fields, ValidationError
 from pymongo import MongoClient
-from dotenv import load_dotenv
+# from pymongo import json_util
+# from dotenv import load_dotenv
 from urllib.parse import quote_plus
 import mimetypes
 # from langchain.chains import RetrievalQA
@@ -144,6 +145,7 @@ chain = load_qa_chain(OpenAI(temperature=0), chain_type="stuff")
 #     retriever=document_search.as_retriever(),
 #     chain_type="stuff"
 # )
+
 
 def get_openai_response(prompt, context=None):
     try:
