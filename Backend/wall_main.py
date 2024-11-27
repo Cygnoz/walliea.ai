@@ -24,6 +24,12 @@ from urllib.parse import quote_plus
 import mimetypes
 # from langchain.chains import RetrievalQA
 
+
+app = Flask(__name__)
+
+
+CORS(app, resources={r"/*": {"origins":"http://13.232.79.148/"}})
+
 # Define the Registration Schema
 class RegistrationSchema(Schema):
 
