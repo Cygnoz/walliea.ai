@@ -21,7 +21,7 @@ et-xmlfile==1.1.0
 executing==2.1.0
 faiss-cpu==1.9.0
 Flask==2.3.2
-Flask-Cors==3.1.1
+Flask-Cors==5.0.0
 frozenlist==1.4.1
 git-filter-repo==2.45.0
 greenlet==3.1.1
