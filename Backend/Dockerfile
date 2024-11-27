@@ -35,4 +35,4 @@ EXPOSE 5001
 ENV FLASK_ENV=production
 
 # Command to run the app with Gunicorn in production
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5001", "--timeout", "120", "app:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5001", "--timeout", "120", "wall_main:app"]
