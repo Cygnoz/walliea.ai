@@ -21,7 +21,7 @@ import mimetypes
 from langchain.chains import RetrievalQA
  
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins":"http://13.232.79.148/"}})
+CORS(app, resources={r"/*": {"origins":"https://www.walliea.ai"}})
  
 # Define the Registration Schema
 class RegistrationSchema(Schema):
