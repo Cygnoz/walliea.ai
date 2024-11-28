@@ -1,27 +1,30 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from langchain_openai.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-# from langchain.chains.question_answering import load_qa_chain
+from langchain_openai import OpenAIEmbeddings
 from langchain_openai.llms import OpenAI
-import logging
+from langchain_openai import OpenAI, ChatOpenAI
+import mimetypes
 import os
 import requests
 import json
 from bson import json_util
 from bs4 import BeautifulSoup
-import openai
 import re
 from datetime import datetime
+from langchain.chains import RetrievalQA
+from openai import OpenAI
 from marshmallow import Schema, fields, ValidationError
 from pymongo import MongoClient
+import logging
+# from pymongo import json_util
+# from dotenv import load_dotenv
 from urllib.parse import quote_plus
-import mimetypes
-from langchain.chains import RetrievalQA
- 
-app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins":"https://www.walliea.ai"}})
+import warnings # Suppress all warningswarnings.filterwarnings("ignore")
+
+warnings.filterwarnings("ignore")
  
 # Define the Registration Schema
 class RegistrationSchema(Schema):
@@ -37,6 +40,10 @@ class BannerSchema(Schema):
     subtitle = fields.Str(required=True)
     image = fields.Str(required=True)
     url = fields.Str(required=True)
+ 
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins":"https://www.walliea.ai"}})
+# CORS(app)
  
 # MongoDB credentials
 username = "dev"
@@ -59,9 +66,10 @@ try:
 except Exception as e:
     logging.error(f"Failed to connect to MongoDB: {str(e)}")
  
-# load_dotenv() 
-os.environ["OPENAI_API_KEY"]="my_api_key"
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# load_dotenv()
+os.environ["OPENAI_API_KEY"] = "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"
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+ 
  
 website_urls = [
     "https://wallmarkply.com/",
@@ -95,7 +103,7 @@ website_urls = [
     "https://wallmarkply.com/wp-login.php?action=lostpassword"
 ]
  
-# Hardcoded contact details
+# hardcoded contact details
 CONTACT_DETAILS = """
 Wallmark Ply Pvt Ltd.
 Address: Odakkaly, Perumbavoor,
@@ -112,7 +120,11 @@ def scrape_data():
         try:
             response = requests.get(url)
             response.raise_for_status()  # Raises an error for bad status codes
-            soup = BeautifulSoup(response.content, 'lxml-xml')
+            content_type = response.headers.get("Content-Type", "")
+            if "xml" in content_type or mimetypes.guess_type(url)[0] == "application/xml":
+                soup = BeautifulSoup(response.content, 'lxml-xml') # Use XML parser
+            else:
+                soup = BeautifulSoup(response.content, 'html.parser')  # Use HTML parser
             for paragraph in soup.find_all(['p', 'h1', 'h2', 'h3']):
                 raw_text += paragraph.get_text() + "\n"
         except requests.exceptions.RequestException as e:
@@ -127,36 +139,38 @@ text_splitter = CharacterTextSplitter(separator="\n", chunk_size=800, chunk_over
 texts = text_splitter.split_text(raw_text)
  
 # Download embeddings from OpenAI
-embeddings = OpenAIEmbeddings()
+embeddings = OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"))
 document_search = FAISS.from_texts(texts, embeddings)
 chain = RetrievalQA.from_chain_type(
-    llm=OpenAI(temperature=0),
+    llm=ChatOpenAI(model="gpt-3.5-turbo", temperature=0),
     retriever=document_search.as_retriever(),
     chain_type="stuff"
 )
+ 
  
 def get_openai_response(prompt, context=None):
     try:
         messages = [{"role": "system", "content": context}] if context else []
         messages.append({"role": "user", "content": prompt})
  
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages,
             max_tokens=200
         )
-        return response.choices[0].message['content'].strip()
-    except openai.error.OpenAIError as e:
+        return response.choices[0].message.content.strip()
+    except Exception as e:
         return f"OpenAI Error: {str(e)}"
  
 def is_calculation_question(question):
     math_keywords = ['calculate', 'sum', 'add', 'subtract', 'multiply', 'divide', 'total', 'average', 'mean', 'difference']
     math_symbols = re.search(r'[0-9\+\-\*/]', question)
-   
+    
     if any(keyword in question.lower() for keyword in math_keywords) or math_symbols:
         return True
     return False
  
+# Function to check if the question is about contact details or address
 def is_contact_or_location_question(question):
     contact_keywords = ['contact', 'phone', 'email', 'address', 'location', 'where', 'reach']
     if any(keyword in question.lower() for keyword in contact_keywords):
@@ -172,57 +186,37 @@ def chat():
     global conversation_context
     user_input = request.json['message']
     bot_response = ""
+    # Handling greetings with OpenAI
+    greeting_response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are an assistant that determines if a user input is a greeting and responds accordingly."},
+            {"role": "user", "content": f"Is the following a greeting? '{user_input}'"}
+        ],
+        max_tokens=50,
+        temperature=0
+    )
+    
+    is_greeting = greeting_response.choices[0].message.content.strip().lower()
  
-    # if "yes" in is_greeting:
-    if user_input.lower() in [
-    "hey", "hi", "hii", "hello", "hlo", "heya", "yo", "howdy", "hola", "ciao",
-    "heyo", "sup", "hullo", "hiya", "bonjour", "namaste", "salaam", "ola", "ahoy",
-    "hi-5", "shalom", "aloha", "cheers", "bless", "peace", "g’day", "kon’nichiwa",
-    "wazzup", "marhaba", "salute", "jambo", "howzit", "oi", "saludos", "tag",
-    "yoho", "buongiorno", "merhaba", "alola", "heya", "hihi", "w’appen?", "hallo",
-    "howdy-do", "salve", "ello", "top!", "yohoho", "heya!", "hey-hey", "heya-hey",
-    "‘sup", "yoo-hoo", "ho-ho", "whoop!", "ayo", "here!", "whaddup", "peekaboo",
-    "hullo!", "helloo", "yoo", "youhoo", "ey!", "greets", "greetz", "ellow!",
-    "cheers!", "waddup", "wah", "haaai", "eyyo", "ho!", "olaa", "annyeong",
-    "hai!", "yessir", "ya", "saluto", "yoop", "‘hoy", "‘lo", "heey", "alohaa",
-    "wotcha", "oye", "hola!", "chao", "servus", "guten!", "blessings", "yow",
-    "heeyyy", "yep", "thumbs-up", "greeetz", "hoot!", "haii", "hay", "peace",
-    "morning!", "good day!", "rise and shine!", "top of the morning!",
-    "have a great morning!", "wishing you a lovely morning!",
-    "bright and early!", "hope your morning is wonderful!", "hello, sunshine!",
-    "a beautiful morning to you!", "here’s to a fresh start!",
-    "good morning to you!", "wishing you a happy morning!",
-    "enjoy your morning!", "start your day with a smile!",
-    "good vibes this morning!", "make it a great morning!",
-    "morning blessings to you!", "have a refreshing morning!",
-    "hope your morning’s off to a good start!", "hi! how’s it going?",
-    "hello! what’s up?", "hey! how are you?", "hi there! how’s your day?",
-    "hello! what are you up to?", "good morning! how’s everything?",
-    "hi! hope you’re doing well.", "hey there! got a minute?",
-    "hi! how’ve you been?", "hello! anything new?", "hey! how’s your day been?",
-    "hi there! what’s on your mind?", "hello! how’s your week going?",
-    "hi! all good with you?", "hey! need any help?", "hi! what’s going on?",
-    "hello! how’s life treating you?", "hi there! what’s happening?",
-    "hey! got any plans today?", "hi! how’s everything going?", "hlo", "lo",
-    "loo", "hihi", "heeey", "hey", "heyy", "heya", "yoo", "yo", "ho", "hoy",
-    "hiya", "hay", "heyyy", "heyo", "hoho", "hai", "haiii","heii", "yooo", "yoo-hoo",
-    "heey", "helloo", "ello", "oi", "haaai", "hi-hi", "alo", "yoohoo", "ey"]:
- 
-        bot_response = "Hello! Welcome to walliea.ai, how can I assist you today?"
+    if "yes" in is_greeting:
+        bot_response = "Hello! Welcome to Wallmark Ply, how can I assist you today?"
     elif user_input.lower() in ["wallmark", "wall mark"]:
         bot_response = "Wallmark Ply is a trusted and preferred brand of high-quality plywood that has won the prestigious Times Business Award. Powered by Cygnotech Labs, it is known for its passion for producing top-notch plywood products."
-    elif user_input.lower() in ["bye", "thank you", "thanks", "goodbye", "see you", "later", "talk to you later"]:
+    elif user_input.lower() in ["bye", "thank you", "thanks"]:
         bot_response = "Goodbye, and have a great day ahead!"
-    elif is_contact_or_location_question(user_input):
-        bot_response = CONTACT_DETAILS
+    elif is_contact_or_location_question(user_input):  # Check if the user asks for contact details
+        bot_response = CONTACT_DETAILS  # Provide hardcoded contact details
     else:
         question = user_input.strip()
         if len(question) < 4:
             bot_response = "Please enter a valid question!"
         else:
             if is_calculation_question(question):
+                # Use GPT-3.5 for calculation-related questions
                 bot_response = get_openai_response(user_input, context=conversation_context)
             else:
+                # Check if user is asking about a previous conversation
                 if "earlier" in user_input.lower() or "previous" in user_input.lower():
                     relevant_history = ""
                     for entry in chat_history:
@@ -235,15 +229,19 @@ def chat():
                 else:
                     docs = document_search.similarity_search(user_input)
                     if docs:
-                        kb_response = chain.run(input_documents=docs, question=question)
+                        # Replace chain.run() with invoke()
+                        kb_response = chain.invoke({"query": question, "input_documents": docs})["result"]
                         kb_response = kb_response.replace("Based on the provided context, ", "").strip()
                         kb_response = kb_response.replace("According to the information, ", "").strip()
                         bot_response = kb_response
                     else:
                         bot_response = "Sorry, I couldn't find relevant information from our database."
-   
+ 
+    # Store the conversation with timestamps (only internally, not displayed)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     chat_history.append({"user": user_input, "bot": bot_response, "timestamp": timestamp})
+    
+    # Update conversation context for follow-up questions
     conversation_context += f"User: {user_input}\nWallya: {bot_response}\n"
  
     return jsonify({"response": bot_response})
