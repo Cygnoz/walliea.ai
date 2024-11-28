@@ -67,7 +67,7 @@ except Exception as e:
     logging.error(f"Failed to connect to MongoDB: {str(e)}")
  
 # load_dotenv()
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "my_api_key"
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
  
  
