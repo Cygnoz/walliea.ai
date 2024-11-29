@@ -42,8 +42,8 @@ class BannerSchema(Schema):
     url = fields.Str(required=True)
  
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins":"https://www.walliea.ai"}})
-# CORS(app)
+# CORS(app, resources={r"/*": {"origins":"https://www.walliea.ai"}})
+CORS(app)
  
 # MongoDB credentials
 username = "dev"
@@ -305,6 +305,13 @@ def get_all_banners():
        
     except Exception as e:
         return jsonify({"error": "Server error", "details": str(e)}), 500
- 
+    
+@app.route('/')
+def hello_world():
+    print("Hello, World!")
+    return jsonify({"message": "Hello, World!"})
+    
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
