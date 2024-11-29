@@ -65,7 +65,7 @@ function InputField({ isDarkMode, isTyping, onSendMessage }: Props) {
           onKeyPress={handleKeyPress}
           className={`w-[86.4%] h-14 pl-14 pr-32 border-0 rounded-[58px] text-base focus:outline-none 
             ${isDarkMode ? "bg-[#272626] text-white" : "bg-white text-black"}`}
-          placeholder="Need plywood ideas? Consult our wallya.ai"
+          placeholder="Need plywood ideas? Consult our Walliea.ai"
           style={{
             boxShadow: `
               0px 1px 3px 0px #8FFB5D1A,
