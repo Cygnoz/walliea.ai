@@ -4,7 +4,7 @@ import MicIcon from "../assets/icons/MicIcon";
 import SendIcon from "../assets/icons/SendIcon";
 import starIcon from "../assets/images/Vector.png";
 import Registration from "./Registration";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   isDarkMode: boolean;
@@ -38,7 +38,7 @@ function InputField({ isDarkMode, isTyping, onSendMessage }: Props) {
   const handleSend = () => {
     if (inputValue.trim() && !isTyping) {
       onSendMessage(inputValue);
-      setInputValue(""); 
+      setInputValue("");
     }
   };
 
@@ -47,7 +47,21 @@ function InputField({ isDarkMode, isTyping, onSendMessage }: Props) {
       handleSend();
     }
   };
+  const [placeholderText, setPlaceholderText] = useState("Need plywood ideas? Consult our Walliea.ai");
 
+  useEffect(() => {
+    const updatePlaceholder = () => {
+      if (window.innerWidth <= 768) {
+        setPlaceholderText("Need plywood ideas?");
+      } else {
+        setPlaceholderText("Need plywood ideas? Consult our Walliea.ai");
+      }
+    };
+
+    updatePlaceholder();
+    window.addEventListener("resize", updatePlaceholder);
+    return () => window.removeEventListener("resize", updatePlaceholder);
+  }, []);
   return (
     <>
       <div className="flex justify-center relative mb-1">
@@ -63,9 +77,9 @@ function InputField({ isDarkMode, isTyping, onSendMessage }: Props) {
           onClick={openModal} // Open modal if not registered
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
-          className={`w-[86.4%] h-14 pl-14 pr-32 border-0 rounded-[58px] text-base focus:outline-none 
+          className={`md:w-[86.4%] w-[97%] h-14 pl-14 pr-32 border-0 rounded-[58px] md:text-base text-sm focus:outline-none 
             ${isDarkMode ? "bg-[#272626] text-white" : "bg-white text-black"}`}
-          placeholder="Need plywood ideas? Consult our Walliea.ai"
+          placeholder={placeholderText}
           style={{
             boxShadow: `
               0px 1px 3px 0px #8FFB5D1A,

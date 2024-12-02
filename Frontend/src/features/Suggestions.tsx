@@ -64,7 +64,7 @@ function Suggestions({ isDarkMode, onQuestionSelect }: Props) {
           <div
             key={index}
             onClick={() => openModal(question)}
-            className={`rounded-lg p-4 w-[34%] 
+            className={`rounded-lg p-4 w-[34%]  hidden md:block
               ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]"}`}
             style={{
               boxShadow: `

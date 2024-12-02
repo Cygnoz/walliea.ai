@@ -54,7 +54,7 @@ const Modal = ({ onClose, open, children, className, style, align = 'center', is
           role="dialog"
         >
           <div
-            className={`rounded-3xl h-auto ${className || 'w-[60%]'} transition-transform duration-300 ${isDarkMode ? 'bg-[#151414]' : 'bg-white'}`}
+            className={`md:rounded-3xl h-auto ${className || 'w-[60%]'} transition-transform duration-300 ${isDarkMode ? 'bg-[#151414]' : 'bg-white'}`}
             onClick={handleModalClick}
             style={style}
           >

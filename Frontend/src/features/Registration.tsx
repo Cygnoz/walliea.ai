@@ -12,7 +12,8 @@ type Props = {
 };
 
 function Registration({ isModalOpen, closeModal, isDarkMode }: Props) {
-    const { setIsRegistered } = useRegistration(); // Use the context to manage registration state
+    const { setIsRegistered } = useRegistration();
+    const [isLoading, setIsLoading] = useState(false);
     const [userData, setUserData] = useState({
         fullname: "",
         phone_no: "",
@@ -34,6 +35,7 @@ function Registration({ isModalOpen, closeModal, isDarkMode }: Props) {
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
         const newErrors = {
             fullname: !userData.fullname,
         };
@@ -50,11 +52,13 @@ function Registration({ isModalOpen, closeModal, isDarkMode }: Props) {
             }
         } catch (error: any) {
             console.error("Registration failed:", error.response?.data || error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <Modal open={isModalOpen} onClose={closeModal} isDarkMode={isDarkMode} className={`w-[32%] text-start  px-8 py-6 ${isDarkMode ? "bg-[#1C1C1C]" : "bg-white"}`}>
+        <Modal open={isModalOpen} onClose={closeModal} isDarkMode={isDarkMode} className={`md:w-[32%] w-[100%] h-[100vh] md:h-auto text-start  px-8 py-6 ${isDarkMode ? "bg-[#1C1C1C]" : "bg-white"}`}>
             <div>
                 <span className={`text-3xl font-semibold ${isDarkMode ? "text-[#E6E6E6]" : "text-[#3A3838]"}`}>
                     Connect With Us
@@ -161,7 +165,7 @@ function Registration({ isModalOpen, closeModal, isDarkMode }: Props) {
                                     ? "bg-gradient-to-r from-[#C6FFAC] to-[#5DD723] text-[#1D5A00]"
                                     : "bg-[#C6FFAC] text-[#1D5A00]"}`}
                         >
-                            continue
+                       {isLoading ? "Connecting.." : "continue"}
                         </button>
                     </div>
                     <p className="text-xs text-center text-[#A8A4A4]">

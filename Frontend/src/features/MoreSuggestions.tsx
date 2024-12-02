@@ -7,7 +7,7 @@ type Props = {
 
 function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
     return (
-        <div className="">
+        <div className="hidden md:block">
             <p
                 className="mt-10 mb-3 text-transparent bg-clip-text text-sm"
                 style={{
@@ -25,10 +25,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]"} `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("How much plywood do I need to wall panel a 300 sqft room with plywood size 8 x 4")}
+                        onClick={() => onSuggestionClick("Can I get the contact details of the nearest Wallmark Ply distributor ?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">How much plywood do I need to wall panel a 300 sqft room with plywood size 8 x 4</p>
+                        <p className="text-[0.625rem]">Can I get the contact details of the nearest Wallmark Ply distributor?</p>
                     </div>
 
                     {/* Suggestion 2 */}
@@ -36,10 +36,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]"} `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("What are some common applications for plywood in furniture making?")}
+                        onClick={() => onSuggestionClick("How can plywood be creatively utilized in home decor?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">What are some common applications for plywood in furniture making?</p>
+                        <p className="text-[0.625rem]">How can plywood be creatively utilized in home decor?</p>
                     </div>
 
                     {/* Suggestion 3 */}
@@ -47,10 +47,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]"} `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("How does the number of layers in plywood affect its strength and durability?")}
+                        onClick={() => onSuggestionClick("How much plywood do I need for a 12x15 ft ceiling?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">How does the number of layers in plywood affect its strength and durability?</p>
+                        <p className="text-[0.625rem]">How much plywood do I need for a 12x15 ft ceiling?</p>
                     </div>
                 </div>
 
@@ -82,10 +82,10 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
                         className={`  rounded-2xl px-3 w-36 py-3 space-y-4 shadow-md cursor-pointer
                             ${isDarkMode ? "bg-[#1e1e1e] text-[#AAAAAA]" : "bg-white text-[#676666]"} `}
                         style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-                        onClick={() => onSuggestionClick("How can plywood be used in construction for structural applications?")}
+                        onClick={() => onSuggestionClick("How is plywood used for structural purposes in construction?")}
                     >
                         <BrushIcon />
-                        <p className="text-[0.625rem]">How can plywood be used in construction for structural applications?</p>
+                        <p className="text-[0.625rem]">How is plywood used for structural purposes in construction?</p>
                     </div>
                 </div>
 

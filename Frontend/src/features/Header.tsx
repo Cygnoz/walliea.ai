@@ -1,6 +1,6 @@
-import BellIcon from "../assets/icons/BellIcon";
-import HomeIcon from "../assets/icons/HomeIcon";
-import UserIcon from "../assets/icons/UserIcon";
+// import BellIcon from "../assets/icons/BellIcon";
+// import HomeIcon from "../assets/icons/HomeIcon";
+// import UserIcon from "../assets/icons/UserIcon";
 import wallmarkAi from "../assets/images/Walliea.ai.png";
 import wallMarlLogo from "../assets/images/WALLMARK-PLY-Logo 1 1.png";
 import whiteSunLogo from "../assets/images/sun-medium.svg";
@@ -15,15 +15,15 @@ function Header({ isDarkMode, onToggle }: Props) {
   return (
     <div className="px-6 py-2 flex justify-between items-center">
       <div>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-10 mt-3">
           <img src={wallmarkAi} alt="Wallmark AI Logo" className="w-36" />
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <HomeIcon isDarkMode={isDarkMode} />
-          </div>
+          </div> */}
         </div>
         <div className="flex items-center mt- gap-1 ms-5">
-          <span className="text-xs text-[#787878]">Powered By</span>
-          <img src={wallMarlLogo} alt="Wallmark Logo" className="w-14" />
+          <span className="text-xs text-[#787878] hidden md:block">Powered By</span>
+          <img src={wallMarlLogo} alt="Wallmark Logo" className="w-14 mt-1.5 hidden md:block" />
         </div>
       </div>
 
@@ -54,12 +54,12 @@ function Header({ isDarkMode, onToggle }: Props) {
           </label>
         </div>
 
-        <div>
+        {/* <div>
           <BellIcon isDarkMode={isDarkMode} />
         </div>
         <div>
           <UserIcon isDarkMode={isDarkMode} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
