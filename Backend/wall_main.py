@@ -20,7 +20,7 @@ from marshmallow import Schema, fields, ValidationError
 from pymongo import MongoClient
 import logging
 # from pymongo import json_util
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from urllib.parse import quote_plus
 import warnings # Suppress all warningswarnings.filterwarnings("ignore")
 
@@ -45,17 +45,32 @@ app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins":"https://www.walliea.ai"}})
 CORS(app)
  
-# MongoDB credentials
-username = "dev"
-password = "walliea"  
+# # MongoDB credentials
  
+ 
+# # URL-encode username and password
+# encoded_username = quote_plus(username)
+# encoded_password = quote_plus(password)
+ 
+# # MongoDB connection string
+# mongodb_uri = f"mongodb+srv://{encoded_username}:{encoded_password}@wallmark.tmreg.mongodb.net/?retryWrites=true&w=majority&appName=WallMark"
+
+# Load environment variables from .env file
+load_dotenv()
+
+# MongoDB credentials
+username = os.getenv("MONGODB_USERNAME")
+password = os.getenv("MONGODB_PASSWORD")
+uri_template = os.getenv("MONGODB_URI_TEMPLATE")
+
 # URL-encode username and password
 encoded_username = quote_plus(username)
 encoded_password = quote_plus(password)
- 
+
 # MongoDB connection string
-mongodb_uri = f"mongodb+srv://{encoded_username}:{encoded_password}@wallmark.tmreg.mongodb.net/?retryWrites=true&w=majority&appName=WallMark"
- 
+mongodb_uri = uri_template.format(username=encoded_username, password=encoded_password)
+
+
 try:
     client = MongoClient(mongodb_uri)
     db = client.get_database('WallMark')
