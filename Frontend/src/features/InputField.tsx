@@ -1,6 +1,6 @@
 import { useRegistration } from "../context/RegistrationContext"; // Import the context
-import GalleryIcon from "../assets/icons/GalleryIcon";
-import MicIcon from "../assets/icons/MicIcon";
+// import GalleryIcon from "../assets/icons/GalleryIcon";
+// import MicIcon from "../assets/icons/MicIcon";
 import SendIcon from "../assets/icons/SendIcon";
 import starIcon from "../assets/images/Vector.png";
 import Registration from "./Registration";
@@ -92,8 +92,8 @@ function InputField({ isDarkMode, isTyping, onSendMessage }: Props) {
         />
 
         <div className="absolute flex gap-3 top-1/2 right-[10%] transform -translate-y-1/2">
-          <MicIcon />
-          <GalleryIcon />
+          {/* <MicIcon />
+          <GalleryIcon /> */}
           <div className="ms-4" onClick={handleSend}>
             <SendIcon isDarkMode={isDarkMode} />
           </div>

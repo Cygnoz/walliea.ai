@@ -12,6 +12,7 @@ import { sendMessage } from "../services/allApi";
 import SkeletonLoader from "../features/SkeletonLoader ";
 import { useRegistration } from "../context/RegistrationContext";
 import MobileSuggestion from "../features/MobileSuggestion";
+import LetsConnect from "../features/LetsConnect";
 
 type Props = {
   isDarkMode: boolean;
@@ -121,6 +122,9 @@ function ChatBot({ isDarkMode }: Props) {
         </div>
         <div className="flex mt-auto justify-start md:ms-8 ms-4">
           {!isRegistered && <NewLetsConnect isDarkMode={isDarkMode} />}
+        </div>
+        <div className="">
+        { isRegistered && <LetsConnect/>}
         </div>
       </div>
 
