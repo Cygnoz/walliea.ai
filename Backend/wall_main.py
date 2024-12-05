@@ -45,35 +45,37 @@ app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins":"https://www.walliea.ai"}})
 CORS(app)
  
-# # MongoDB credentials
+load_dotenv()
+
+username = os.getenv("MONGODB_USERNAME")
+password = os.getenv("MONGODB_PASSWORD")
  
+# URL-encode username and password
+encoded_username = quote_plus(username)
+encoded_password = quote_plus(password)
  
-# # URL-encode username and password
-# encoded_username = quote_plus(username)
-# encoded_password = quote_plus(password)
- 
-# # MongoDB connection string
-# mongodb_uri = f"mongodb+srv://{encoded_username}:{encoded_password}@wallmark.tmreg.mongodb.net/?retryWrites=true&w=majority&appName=WallMark"
+# MongoDB connection string
+mongodb_uri = f"mongodb+srv://{encoded_username}:{encoded_password}@cluster0.rdzev.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 # Load environment variables from .env file
 load_dotenv()
 
-# MongoDB credentials
-username = os.getenv("MONGODB_USERNAME")
-password = os.getenv("MONGODB_PASSWORD")
-uri_template = os.getenv("MONGODB_URI_TEMPLATE")
+# # MongoDB credentials
+# username = os.getenv("MONGODB_USERNAME")
+# password = os.getenv("MONGODB_PASSWORD")
+# uri_template = os.getenv("MONGODB_URI_TEMPLATE")
 
-# URL-encode username and password
-encoded_username = quote_plus(username)
-encoded_password = quote_plus(password)
+# # URL-encode username and password
+# encoded_username = quote_plus(username)
+# encoded_password = quote_plus(password)
 
-# MongoDB connection string
-mongodb_uri = uri_template.format(username=encoded_username, password=encoded_password)
+# # MongoDB connection string
+# mongodb_uri = uri_template.format(username=encoded_username, password=encoded_password)
 
 
 try:
     client = MongoClient(mongodb_uri)
-    db = client.get_database('WallMark')
+    db = client.get_database('test')
     app.config['db'] = db
     register_collection = db.get_collection('registerSchema')
     banner_collection = db.get_collection('banners')
