@@ -165,7 +165,7 @@ function Registration({ isModalOpen, closeModal, isDarkMode }: Props) {
                                     ? "bg-gradient-to-r from-[#C6FFAC] to-[#5DD723] text-[#1D5A00]"
                                     : "bg-[#C6FFAC] text-[#1D5A00]"}`}
                         >
-                       {isLoading ? "Connecting.." : "continue"}
+                            {isLoading ? "Connecting.." : "continue"}
                         </button>
                     </div>
                     <p className="text-xs text-center text-[#A8A4A4]">

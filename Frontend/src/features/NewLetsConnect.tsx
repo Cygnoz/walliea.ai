@@ -37,9 +37,9 @@ function NewLetsConnect({ isDarkMode }: Props) {
           boxShadow: "0px 0px 1px 0px #8A85851A, -2px 0px 2px 0px #8A858517, -4px 0px 3px 0px #8A85850D, -8px 0px 3px 0px #8A858503, -12px 0px 3px 0px #8A858500",
         }}
       >
-        <WhatsAppIcon />
-        <NewInstaIcon />
-        <NewFbIcon />
+        <a href=""><WhatsAppIcon /></a>
+        <a href="https://www.instagram.com/wallmarkply/" target="blank"><NewInstaIcon /></a>
+        <a href="https://www.facebook.com/wallmarkply/" target="blank"><NewFbIcon /></a>
       </div>
     </div>
   );

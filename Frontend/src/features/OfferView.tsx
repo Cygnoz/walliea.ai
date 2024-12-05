@@ -30,11 +30,11 @@ function OfferView({ }: Props) {
             backgroundImage: `url(${banner.image})`,
           }}
         >
-          <div className="flex justify-end ">
+          {/* <div className="flex justify-end ">
             <span className=" bg-[#fef7ff4a] cursor-pointer text-2xl font-thin h-6 w-6 flex justify-center items-center text-[#FEF7FF] rounded-full">
               &times;
             </span>
-          </div>
+          </div> */}
 
           <div
             className="w-[90%] rounded-md absolute text-center bottom-3 px-2 py-2"
