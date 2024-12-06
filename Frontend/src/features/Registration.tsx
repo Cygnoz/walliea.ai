@@ -3,182 +3,262 @@ import Modal from "../components/Modal";
 import line from "../assets/images/Frame 1161.png";
 import emailIcon from "../assets/images/Group.png";
 import { register } from "../services/allApi";
-import { useRegistration } from "../context/RegistrationContext"; // Import the context
+import { useRegistration } from "../context/RegistrationContext";
 
 type Props = {
-    isModalOpen: boolean;
-    closeModal: () => void;
-    isDarkMode: boolean;
+  isModalOpen: boolean;
+  closeModal: () => void;
+  isDarkMode: boolean;
 };
 
-function Registration({ isModalOpen, closeModal, isDarkMode }: Props) {
-    const { setIsRegistered } = useRegistration();
-    const [isLoading, setIsLoading] = useState(false);
-    const [userData, setUserData] = useState({
-        fullname: "",
-        phone_no: "",
-        company_name: "",
-        email: "",
-    });
+const Registration = ({ isModalOpen, closeModal, isDarkMode }: Props) => {
+  const { setIsRegistered } = useRegistration();
+  const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState({
+    fullname: "",
+    phone_no: "",
+    company_name: "",
+    email: "",
+  });
 
-    const [errors, setErrors] = useState({
-        fullname: false,
-    });
+  const [errors, setErrors] = useState({
+    fullname: "",
+    phone_no: "",
+    email: "",
+  });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setUserData((prevData) => ({
-            ...prevData,
-            [name]: value,
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserData((prevData) => ({ ...prevData, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
+  const validateInputs = () => {
+    const newErrors: { fullname: string; phone_no: string; email: string } = {
+      fullname: "",
+      phone_no: "",
+      email: "",
+    };
+  
+    if (!userData.fullname.trim()) newErrors.fullname = "Full name is required.";
+    if (!/^\d{10}$/.test(userData.phone_no))
+      newErrors.phone_no = "Phone number must be 10 digits.";
+    if (
+      userData.email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)
+    )
+      newErrors.email = "Enter a valid email address.";
+  
+    return newErrors;
+  };
+  
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const validationErrors = validateInputs();
+    if (
+      validationErrors.fullname ||
+      validationErrors.phone_no ||
+      validationErrors.email
+    ) {
+      setErrors(validationErrors);
+      setIsLoading(false);
+      return;
+    }
+  
+    try {
+      const response = await register(userData);
+      if (response?.status === 201) {
+        localStorage.setItem("isRegistered", "true");
+        setIsRegistered(true);
+        closeModal();
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: response?.data?.error?.email || "Registration failed.",
         }));
-    };
+      }
+    } catch (error: any) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: error?.response?.data?.error?.email || "An error occurred.",
+      }));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
 
-    const handleRegister = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-        const newErrors = {
-            fullname: !userData.fullname,
-        };
-        setErrors(newErrors);
+  return (
+    <Modal
+      open={isModalOpen}
+      onClose={closeModal}
+      isDarkMode={isDarkMode}
+      className={`md:w-[32%] w-[100%] h-[100vh] md:h-auto text-start px-8 py-6 ${
+        isDarkMode ? "bg-[#1C1C1C]" : "bg-white"
+      }`}
+    >
+      <div>
+        <h2
+          className={`text-3xl font-semibold ${
+            isDarkMode ? "text-[#E6E6E6]" : "text-[#3A3838]"
+          }`}
+        >
+          Connect With Us
+        </h2>
+        <p
+          className={`mt-2 text-sm font-extralight ${
+            isDarkMode ? "text-[#5A5958]" : "text-[#A8A4A4]"
+          }`}
+        >
+          Join our community and unlock new opportunities.
+        </p>
+        <img src={line} className="mt-3" alt="decorative line" />
 
-        try {
-            const response = await register(userData);
-            if (response && response.status === 201) {
-                localStorage.setItem("isRegistered", "true");
-                setIsRegistered(true);
-                closeModal();
-            } else {
-                console.error("Registration failed:", response?.data?.error || "Unknown error");
-            }
-        } catch (error: any) {
-            console.error("Registration failed:", error.response?.data || error.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        <form onSubmit={handleRegister} className="mt-6 space-y-6">
+          {/* Full Name */}
+          <InputField
+            label="Full Name"
+            id="fullname"
+            name="fullname"
+            value={userData.fullname}
+            onChange={handleInputChange}
+            placeholder="Enter name"
+            error={errors.fullname}
+            isDarkMode={isDarkMode}
+          />
 
-    return (
-        <Modal open={isModalOpen} onClose={closeModal} isDarkMode={isDarkMode} className={`md:w-[32%] w-[100%] h-[100vh] md:h-auto text-start  px-8 py-6 ${isDarkMode ? "bg-[#1C1C1C]" : "bg-white"}`}>
-            <div>
-                <span className={`text-3xl font-semibold ${isDarkMode ? "text-[#E6E6E6]" : "text-[#3A3838]"}`}>
-                    Connect With Us
-                </span>
-                <br />
-                <p className={`mt-2 text-sm font-extralight ${isDarkMode ? "text-[#5A5958]" : "text-[#A8A4A4]"}`}>
-                    Join our community and unlock new opportunities.
-                </p>
-                <img src={line} className="mt-3" alt="line" />
+          {/* Phone Number */}
+          <InputField
+            label="Phone Number"
+            id="phone_no"
+            name="phone_no"
+            value={userData.phone_no}
+            onChange={handleInputChange}
+            placeholder="Enter number"
+            error={errors.phone_no}
+            isDarkMode={isDarkMode}
+            type="number"
+            
+          />
 
-                <form onSubmit={handleRegister} className="mt-6 space-y-6 text-[#403C3C]">
-                    {/* Full Name */}
-                    <div>
-                        <label htmlFor="fullname" className={`font-semibold ms-1 ${isDarkMode ? "text-[#E6E6E6]" : "text-[#333030]"}`}>
-                            Full name
-                        </label>
-                        <br />
-                        <input
-                            type="text"
-                            id="fullname"
-                            name="fullname"
-                            value={userData.fullname}
-                            onChange={handleInputChange}
-                            className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
-                focus:outline-none rounded-lg h-11 ${isDarkMode
-                                    ? "border-[#2F2F2F] placeholder-[#313131] text-white"
-                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"} `}
-                            placeholder="Enter name"
-                        />
-                        {errors.fullname && (
-                            <div className="text-red-800 text-xs mt-2 ms-1">
-                                Name is required
-                            </div>
-                        )}
-                    </div>
+          {/* Company Name */}
+          <InputField
+            label="Company Name"
+            id="company_name"
+            name="company_name"
+            value={userData.company_name}
+            onChange={handleInputChange}
+            placeholder="Company name"
+            isDarkMode={isDarkMode}
+          />
 
-                    {/* Phone Number */}
-                    <div>
-                        <label htmlFor="phone_no" className={`font-semibold ms-1 ${isDarkMode ? "text-[#E6E6E6]" : "text-[#333030]"}`}>
-                            Phone Number
-                        </label>
-                        <br />
-                        <input
-                            type="number"
-                            id="phone_no"
-                            name="phone_no"
-                            value={userData.phone_no}
-                            onChange={handleInputChange}
-                            className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
-    focus:outline-none rounded-lg h-11 ${isDarkMode
-                                    ? "border-[#2F2F2F] placeholder-[#313131] text-white"
-                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"} no-spinner`}
-                            placeholder="Enter number"
-                        />
-                    </div>
+          {/* Email */}
+          <InputField
+            label="Email"
+            id="email"
+            name="email"
+            value={userData.email}
+            onChange={handleInputChange}
+            placeholder="user@example.com"
+            error={errors.email}
+            isDarkMode={isDarkMode}
+            icon={emailIcon}
+          />
 
-                    {/* Company Name */}
-                    <div>
-                        <label htmlFor="company_name" className={`font-semibold ms-1 ${isDarkMode ? "text-[#E6E6E6]" : "text-[#333030]"}`}>
-                            Company Name
-                        </label>
-                        <br />
-                        <input
-                            type="text"
-                            id="company_name"
-                            name="company_name"
-                            value={userData.company_name}
-                            onChange={handleInputChange}
-                            className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
-                focus:outline-none rounded-lg h-11 ${isDarkMode
-                                    ? "border-[#2F2F2F] placeholder-[#313131] text-white"
-                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"} `}
-                            placeholder="Example"
-                        />
-                    </div>
-
-                    {/* Email */}
-                    <div className="relative">
-                        <label htmlFor="email" className={`font-semibold ms-1 ${isDarkMode ? "text-[#E6E6E6]" : "text-[#333030]"}`}>
-                            Email
-                        </label>
-                        <br />
-                        <input
-                            type="text"
-                            id="email"
-                            name="email"
-                            value={userData.email}
-                            onChange={handleInputChange}
-                            className={`w-full mt-1 px-3 bg-transparent border focus:border-[#73F238] 
-                focus:outline-none rounded-lg h-11 ${isDarkMode
-                                    ? "border-[#2F2F2F] placeholder-[#313131] text-white"
-                                    : "border-[#B9B8B8] placeholder-[#DEDCDC]"} `}
-                            placeholder="user@gmail.com"
-                        />
-                        <img src={emailIcon} className="w-7 absolute top-[50%] right-3" alt="email icon" />
-                    </div>
-
-                    {/* Register Button */}
-                    <div className="flex justify-center items-center">
-                        <button
-                            type="submit"
-                            className={`mt-6 px-14 py-1.5 text-lg font-semibold rounded-[33px] 
-                ${isDarkMode
-                                    ? "bg-gradient-to-r from-[#C6FFAC] to-[#5DD723] text-[#1D5A00]"
-                                    : "bg-[#C6FFAC] text-[#1D5A00]"}`}
-                        >
-                            {isLoading ? "Connecting.." : "continue"}
-                        </button>
-                    </div>
-                    <p className="text-xs text-center text-[#A8A4A4]">
-                        Please review our Terms of Service and{" "}
-                        <span className={`underline cursor-pointer ${isDarkMode ? "text-[#4ABC15]" : "text-[#555454]"}`}>
-                            Privacy Policy
-                        </span>{" "}
-                        before submitting.
-                    </p>
-                </form>
-            </div>
-        </Modal>
-    );
-}
+          {/* Submit Button */}
+          <div className="flex justify-center items-center">
+            <button
+              type="submit"
+              className={`mt-6 px-14 py-1.5 text-lg font-semibold rounded-[33px] ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-[#C6FFAC] to-[#5DD723] text-[#1D5A00]"
+                  : "bg-[#C6FFAC] text-[#1D5A00]"
+              }`}
+              disabled={isLoading}
+            >
+              {isLoading ? "Connecting..." : "Continue"}
+            </button>
+          </div>
+          <p className="text-xs text-center text-[#A8A4A4]">
+            Please review our Terms of Service and{" "}
+            <span
+              className={`underline cursor-pointer ${
+                isDarkMode ? "text-[#4ABC15]" : "text-[#555454]"
+              }`}
+            >
+              Privacy Policy
+            </span>{" "}
+            before submitting.
+          </p>
+        </form>
+      </div>
+    </Modal>
+  );
+};
 
 export default Registration;
+
+// Reusable InputField Component
+type InputProps = {
+  label: string;
+  id: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  isDarkMode: boolean;
+  error?: string;
+  type?: string;
+  icon?: string;
+};
+
+const InputField = ({
+  label,
+  id,
+  name,
+  value,
+  onChange,
+  placeholder,
+  isDarkMode,
+  error,
+  type = "text",
+  icon,
+}: InputProps) => {
+  return (
+    <div className="relative">
+      <label
+        htmlFor={id}
+        className={`font-semibold ms-1 ${
+          isDarkMode ? "text-[#E6E6E6]" : "text-[#333030]"
+        }`}
+      >
+        {label}
+      </label>
+      <input
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={`w-full no-spinner mt-1 px-3 bg-transparent border focus:border-[#73F238] focus:outline-none rounded-lg h-11 ${
+          isDarkMode
+            ? "border-[#2F2F2F] placeholder-[#313131] text-white"
+            : "border-[#B9B8B8] placeholder-[#DEDCDC]"
+        }`}
+        aria-describedby={`${id}-error`}
+      />
+      {icon && <img src={icon} className="w-7 absolute top-[50%] right-3" alt={`${label} icon`} />}
+      {error && (
+        <div
+          id={`${id}-error`}
+          className="text-red-800 text-xs mt-1.5 ms-1 absolute"
+        >
+          {error}
+        </div>
+      )}
+    </div>
+  );
+};

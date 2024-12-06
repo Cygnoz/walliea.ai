@@ -123,8 +123,8 @@ function ChatBot({ isDarkMode }: Props) {
         <div className="flex mt-auto justify-start md:ms-8 ms-4">
           {!isRegistered && <NewLetsConnect isDarkMode={isDarkMode} />}
         </div>
-        <div className="">
-        { isRegistered && <LetsConnect/>}
+        <div className="left-10 absolute w-[25%] bottom-4">
+          {isRegistered && <LetsConnect isDarkMode={isDarkMode} />}
         </div>
       </div>
 
@@ -199,7 +199,7 @@ function ChatBot({ isDarkMode }: Props) {
                 <div key={index} className="mb-4 text-sm flex items-center justify-end">
                   <div
                     className={`px-4 max-w-[86%] md:max-w-[70%] md:px-5 py-2 flex items-center rounded-lg 
-                    ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+        ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                     style={{
                       wordBreak: "break-word",
                       background: msg.sender === "user"
@@ -208,7 +208,14 @@ function ChatBot({ isDarkMode }: Props) {
                       color: msg.sender === "user" ? "#4ABC15" : "black",
                     }}
                   >
-                    {msg.text}
+                    {/* Render the message with formatting */}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: msg.text
+                          .replace(/\n/g, "<br/>") // Replace \n with line breaks
+                          .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>"), // Replace **text** with bold text
+                      }}
+                    />
                   </div>
                   <img
                     src={msg.sender === "user" ? personIMage : botImage}
@@ -220,6 +227,7 @@ function ChatBot({ isDarkMode }: Props) {
               {isTyping && <SkeletonLoader />}
               <div ref={messagesEndRef} />
             </div>
+
 
             {showDownButton && (
               <div
