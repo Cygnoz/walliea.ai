@@ -9,7 +9,7 @@ function MoreSuggestions({ isDarkMode, onSuggestionClick }: Props) {
     return (
         <div className="hidden md:block">
             <p
-                className="mt-10 mb-3 text-transparent bg-clip-text text-sm"
+                className="mt-1 mb-1.5 text-transparent bg-clip-text text-xs"
                 style={{
                     backgroundImage: 'linear-gradient(91.33deg, #A6A6A6 0.61%, #6E6B6B 99.39%)',
                 }}
