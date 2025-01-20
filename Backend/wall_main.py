@@ -84,41 +84,32 @@ except Exception as e:
     logging.error(f"Failed to connect to MongoDB: {str(e)}")
  
 # load_dotenv()
-os.environ["OPENAI_API_KEY"] = "my_api_key"
+os.environ["OPENAI_API_KEY"] = "my_openai_api_key"
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
  
  
 website_urls = [
     "https://wallmarkply.com/",
-    "https://wallmarkply.com/about/",
     "https://wallmarkply.com/blog/",
-    "https://wallmarkply.com/plywoods/",
-    "https://wallmarkply.com/wallmark-ply-wins-prestigious-times-business-award-for-trusted-preferred-brand/",
-    "https://wallmarkply.com/author/techlead/",
-    "https://wallmarkply.com/pvc-board/",
-    "https://wallmarkply.com/doors/",
-    "https://wallmarkply.com/products/",
-    "https://wallmarkply.com/particle-board/",
-    "https://wallmarkply.com/veneers/",
     "https://wallmarkply.com/contact/",
+    "https://wallmarkply.com/wpc-board/",
+    "https://wallmarkply.com/our-range-of-products/",
+    "https://wallmarkply.com/pvc-board/",
+    "https://wallmarkply.com/particle-board/",
+    "https://wallmarkply.com/about-us/",
+    "https://wallmarkply.com/plywood/",
     "https://wallmarkply.com/mdf/",
-    "https://wallmarkply.com/index.php/blog/",
-    "https://wallmarkply.com/index.php/contact/",
-    "https://wallmarkply.com/index.php/about/",
-    "https://wallmarkply.com/booking/",
-    "https://wallmarkply.com/2024/08/",
+    "https://wallmarkply.com/veneers/",
+    "https://wallmarkply.com/wallmark-ply-stands-out-at-india-woods-a-fusion-of-innovation-and-excellence/",
+    "https://wallmarkply.com/celebrating-exemplary-business-leadership-award-for-best-plywood-brand-in-kerala/",
+    "https://wallmarkply.com/wallmark-ply-shines-in-vanitha-magazine/",
+    "https://wallmarkply.com/discover-wallmark-ply-our-story-in-motion/",
+    "https://wallmarkply.com/the-role-of-quality-doors-in-modern-architecture/",
+    "https://wallmarkply.com/wallmark-ply-wins-prestigious-times-business-award-for-trusted-preferred-brand/",
+    "https://wallmarkply.com/author/wall_mark_sup_admin/",
     "https://wallmarkply.com/category/blog/",
-    "https://wallmarkply.com/index.php/pvc-board/",
-    "https://wallmarkply.com/index.php/doors/",
-    "https://wallmarkply.com/index.php/veneers/",
-    "https://wallmarkply.com/index.php/particle-board/",
-    "https://wallmarkply.com/index.php/plywoods/",
-    "https://wallmarkply.com/index.php/mdf/",
-    "https://wallmarkply.com/comments/feed/",
-    "https://wallmarkply.com/feed/",
-    "https://wallmarkply.com/wp-login.php",
-    "https://wallmarkply.com/wp-login.php?action=lostpassword"
 ]
+
  
 # hardcoded contact details
 CONTACT_DETAILS = """
