@@ -87,7 +87,7 @@ except Exception as e:
 os.environ["OPENAI_API_KEY"] = "my_openai_api_key"
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
  
- 
+  
 website_urls = [
     "https://wallmarkply.com/",
     "https://wallmarkply.com/blog/",
