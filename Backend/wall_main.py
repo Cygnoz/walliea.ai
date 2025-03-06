@@ -108,6 +108,8 @@ website_urls = [
     "https://wallmarkply.com/wallmark-ply-wins-prestigious-times-business-award-for-trusted-preferred-brand/",
     "https://wallmarkply.com/author/wall_mark_sup_admin/",
     "https://wallmarkply.com/category/blog/",
+    "https://wallmarkply.com/plywood-vs-multiwood-a-complete-guide-for-smart-buyers/",
+    "https://wallmarkply.com/wallmark-platinum-premium-advanced-manufacturing-for-superior-quality/"
 ]
 
  
