@@ -31,6 +31,22 @@ function ChatBot({ isDarkMode }: Props) {
     }
   }, [])
 
+  const triggerKeywords: string[] = [
+    "I don't",
+    "I'm sorry",
+    "do not have information",
+    "do not have specific information",
+    "do not have details",
+    "do not have access",
+    "unable to provide",
+    "lack information",
+    "no data available",
+    "insufficient information",
+    "not found",
+    "no relevant information",
+    "if you have any"
+  ];
+
   const handleSendMessage = async (message: string) => {
     if (isTyping) return;
 
@@ -45,11 +61,14 @@ function ChatBot({ isDarkMode }: Props) {
     try {
       const response = await sendMessage({ message });
       if (response.status === 200) {
-        const botResponse = response.data.response;
+        let botResponse = response.data.response;
 
         setTimeout(() => {
           setMessages((prevMessages: any) => {
-            const updatedMessages = [...prevMessages, { text: botResponse, sender: "bot" }];
+            let updatedMessages = [...prevMessages, { text: botResponse, sender: "bot" }];
+            if (triggerKeywords.some(keyword => botResponse.toLowerCase().includes(keyword.toLowerCase()))) {
+              updatedMessages.push({ text: "For more details contact us : +91 97 4491 2617", sender: "bot" });
+            }
             sessionStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
             return updatedMessages;
           });
@@ -61,6 +80,7 @@ function ChatBot({ isDarkMode }: Props) {
       setIsTyping(false);
     }
   };
+
   const handleQuestionSelection = (question: string) => {
     handleSendMessage(question);
   };
@@ -248,8 +268,8 @@ function ChatBot({ isDarkMode }: Props) {
             isTyping={isTyping}
           />
           <span className="md:text-xs text-[10px] text-[#999999] px-1">
-            Walliea.ai may display inaccurate info
-            <span className="hidden md:inline">, including about availability</span>, so double-check its responses
+            Walliea.ai may provide inaccurate results.
+            <span className="hidden md:inline"> Please validate all results</span>, before you use it
           </span>
         </div>
       </div>
